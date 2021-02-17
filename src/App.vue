@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <router-view/>
     <!-- <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <!-- <mt-header fixed title="固定在顶部"></mt-header>
@@ -38,7 +39,7 @@
       </mt-tab-item>
     </mt-tabbar> -->
 
-    <ul
+    <!-- <ul
       v-infinite-scroll="loadMore"
       infinite-scroll-disabled="loading"
       infinite-scroll-distance="10">
@@ -52,7 +53,7 @@
       <div>
         罗佳瑞
       </div>
-    </div>
+    </div> -->
 
 
     
@@ -110,8 +111,9 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 0px;
 }
+
 </style>

@@ -10,7 +10,8 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "mint-ui": "^2.2.13",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "vue-html5plus": "^1.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.1",
