@@ -106,7 +106,7 @@
 
 <script>
 
-import { Toast, Indicator } from 'mint-ui';
+import { Indicator } from 'mint-ui';
 
 export default {
     data() {

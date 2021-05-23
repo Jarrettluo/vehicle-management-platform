@@ -9,29 +9,25 @@
         </mt-header>
 
         <div class="page-field-wrapper">
-            <div class="page-part">
+            <!-- 当注册车辆的id不存在的时候就不显示车辆编码 -->
+            <div class="page-part" v-show="vehicleInfo.id">
                 <mt-field label="车辆编码" placeholder="无" v-model="vehicleInfo.id" disabled></mt-field>
             </div>
             <div class="page-part">
                 <mt-field label="车牌号" placeholder="请输入车牌号" v-model="vehicleInfo.vehiclePlate" :attr="{ maxlength: 10 }">
-
                 </mt-field>
                 <mt-field label="汽车品牌" placeholder="请输入汽车品牌" v-model="vehicleInfo.vehicleBrand" :attr="{ maxlength: 10 }">
-
                 </mt-field>
                 <mt-field label="注册时间" placeholder="选择注册时间" type="date" v-model="vehicleInfo.registrationDate" >
                 </mt-field>
                 <mt-field label="车身颜色" placeholder="请输入车身颜色" v-model="vehicleInfo.vehicleColor" :attr="{ maxlength: 10 }">
-
                 </mt-field>
             </div>
             <div class="page-part">
                 <mt-field label="购车时间" placeholder="选择购车时间" type="date" v-model="vehicleInfo.purchaseDate" >
-
                 </mt-field>
                 <mt-field label="购车价格" placeholder="请输入购车价格（元）" type="number" v-model="vehicleInfo.purchasePrice" 
                 :attr="{ min: 0, max: 10000000 }">
-
                 </mt-field>
             </div>
             <div class="page-part">
@@ -43,11 +39,9 @@
         <div class="row">
             <div class="col button-col">
                 <center>
-                        <a href="javascript:;" class="file" >拍照自动识别
-                            <input type="file" accept="image/*" @change="uploadFile" ref="imageInput">
-                        </a>
-                        
-                    <!-- </mt-button> -->
+                    <a href="javascript:;" class="file" >拍照自动识别
+                        <input type="file" accept="image/*" @change="uploadFile" ref="imageInput">
+                    </a>
                 </center>
             </div>
             <div class="col button-col">
@@ -107,7 +101,6 @@ import Preparednesses from './addPreparedness'
 export default {
     data() {
         return {
-
             vehicleInfo:{
                 id: null,
                 vehiclePlate: null,
@@ -265,7 +258,7 @@ export default {
 
 
         /**
-         * 异步提交数据给后天
+         * 异步提交数据给后台
          */
         async getVehicleInfo(vehicleId){
             await vehiclePageRequest.vehicleRequest('GET', {}, {}, "/"+vehicleId)
@@ -288,7 +281,7 @@ export default {
         },
 
         /**
-         * 异步提交数据给后天
+         * 异步提交数据给后台
          */
         async postVehicleInfo(){
             await vehiclePageRequest.vehicleRequest('POST', {}, this.vehicleInfo, '')
