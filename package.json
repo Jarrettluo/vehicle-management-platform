@@ -13,6 +13,7 @@
     "core-js": "^2.6.5",
     "mint-ui": "^2.2.13",
     "vue": "^2.6.10",
+    "vue-floating": "^0.2.4",
     "vue-html5plus": "^1.0.0",
     "vue-router": "^3.5.1"
   },

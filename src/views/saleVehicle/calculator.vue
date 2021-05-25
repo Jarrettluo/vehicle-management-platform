@@ -1,7 +1,7 @@
 <template>
-	<div style="text-align: center;">
+	<div style="text-align: center;width:100%;margin-bottom: 20px;">
 		<center>
-		<h5>计算计算</h5>
+		<h5></h5>
 		<!-- 计算器 -->
 		<div class="calc-wrap">
 			<div class="calc-in-out">
@@ -360,7 +360,7 @@
 
 <style>
 	.calc-wrap {
-		width: 300px;
+		width: 100%;
 		border: 1px solid #ddd;
 		border-radius: 3px;
 	}

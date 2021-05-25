@@ -29,6 +29,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 
+// 悬浮窗的引入
+import Floating from 'vue-floating';
+Vue.use(Floating)
+
 Vue.config.productionTip = false
 
 new Vue({

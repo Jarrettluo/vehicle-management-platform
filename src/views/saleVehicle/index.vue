@@ -121,6 +121,15 @@
                 </div>
             </div>
         </div>
+
+        <vue-floating isNearBorder @tap="floatingTap" :rightMargin="0" :bottomMargin="20">
+            <div class="floatingView"></div>
+        </vue-floating>
+        <div style="position: absolute; top:88px; z-index: 10;width:100%;padding:10px;" v-show="showCalc">
+            <div class="content" style="padding: 10px;">
+                <Calculator></Calculator>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -128,11 +137,14 @@
 import vehicleInfoRequest from '../../request/requests/vehicleInfo'
 import salePageRequest from '../../request/requests/saleItem'
 import searchPageRequest from '../../request/requests/search'
-import { Toast } from 'mint-ui';
-import NumberInput from '@/components/Plugin/Form/NumberInput';
+import { Toast } from 'mint-ui'
+import NumberInput from '@/components/Plugin/Form/NumberInput'
+import Calculator from './calculator.vue'
+
 export default {
     components: {
-        NumberInput
+        NumberInput,
+        Calculator
     },
     data() {
         return {
@@ -176,6 +188,8 @@ export default {
 
             rotateRepair:false, // 是否旋转整备项目
             rotatePartner: false, // 旋转合作伙伴
+
+            showCalc: false,
         }
     },
     created() {
@@ -618,7 +632,11 @@ export default {
                     clearState: false,
                 }
             }
-        }
+        },
+        floatingTap() {
+            // console.log('aaaa');
+            this.showCalc = !this.showCalc
+        },
 
 
     }
@@ -758,4 +776,19 @@ a:focus {
     font-size:12px;
     margin-bottom:4px;
 }
+
+.floatingView{
+    background-image: url('http://yanxuan.nosdn.127.net/4cc272e9f9eddae1bfe4d057d2fe549a.png');
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.content {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 4px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
 </style>
