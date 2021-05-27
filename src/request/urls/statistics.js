@@ -1,11 +1,4 @@
-// import {
-// 	BASE_URL,
-// } from './baseUrl.js'
-
-// const BASE_URL = 'http://192.168.2.11:8081'
-const BASE_URL = 'http://localhost:8081'
-
-// const BASE_URL = 'http://42.192.121.179:8081/'
+let BASE_URL = require("./baseUrl").BASE_URL;
 
 const STATISTICS_URL = BASE_URL + '/statistics';
 

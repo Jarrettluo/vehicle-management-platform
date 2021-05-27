@@ -17,14 +17,24 @@ import test from "../views/Test"
 Vue.use(Router)
 Vue.use(BootstrapVue)
 
-export default new Router({
+const router = new Router({
     // mode: 'history',
     routes: [
         {
             path: '/',
+            name: "",
+            redirect: "/homepage"
+        },
+        {
+            path: '/loginPage',
+            name: 'loginPage',
+            component: ()=>import("../views/login/index.vue"),
+        },{
+            path: '/homepage',
             name: 'homepage',
             component: homepage,
-        },{
+        },
+        {
             path: '/vehicleList',
             name: 'vehicleList',
             component: vehicleList
@@ -59,3 +69,12 @@ export default new Router({
         }
     ]
 })
+
+router.beforeEach((to, from, next) => {
+    if (to.name !== 'loginPage' && !sessionStorage.getItem("token")) next({ name: 'loginPage' })
+    else next()
+})
+
+
+
+export default router;

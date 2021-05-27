@@ -1,10 +1,10 @@
 <template>
     <div >
         <mt-header title="销售统计报表">
-            <router-link to="/" slot="left">
+            <router-link to="/homepage" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
-            <router-link to="/" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
+            <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
         </mt-header>
         <div style="padding: 14px;">
             <br>

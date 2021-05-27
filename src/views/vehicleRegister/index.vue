@@ -5,7 +5,7 @@
             <a href="javascript:;" @click="goBack" class="goback" slot="left">
                 <i class="mintui mintui-back"></i>
                 返回</a>
-            <router-link to="/" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
+            <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
         </mt-header>
 
         <div class="page-field-wrapper">
