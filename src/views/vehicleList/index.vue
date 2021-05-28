@@ -94,6 +94,8 @@ export default {
                         this.unSoldVehicle.push(data[i])
                     }
                 }
+            }else {
+                Toast("获取失败，检查网络:" + res.message)
             }
         },
 

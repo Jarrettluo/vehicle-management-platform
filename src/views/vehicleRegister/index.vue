@@ -1,6 +1,7 @@
 <template>
 <div>
-    <div class="page-field" style="background-color:#fafafa" v-if="!partnerVisible && !preparedVisible">
+    <!-- v-if="!partnerVisible && !preparedVisible" -->
+    <div class="page-field"  style="background-color:#fafafa" >
         <mt-header title="车辆入库登记">
             <a href="javascript:;" @click="goBack" class="goback" slot="left">
                 <i class="mintui mintui-back"></i>
@@ -85,8 +86,11 @@
 
         
     </div>
-    <Partner  ref="partnerChild" v-show="partnerVisible"> </Partner>
-    <Preparednesses ref="preparedChild" v-show="preparedVisible"> </Preparednesses>
+    <div :class="partnerVisible || preparedVisible?'dialog-page':''">
+        <Partner  ref="partnerChild" v-show="partnerVisible" > </Partner>
+        <Preparednesses ref="preparedChild" v-show="preparedVisible"> </Preparednesses>
+    </div>
+
 </div>
 </template>
 
@@ -556,5 +560,35 @@ a:focus {
     color:#3d4049;
     text-decoration: none;
 }
+
+
+.dialog-page {
+    position: absolute;
+    top: 60px;
+    border-top-right-radius: 32px;
+    border-top-left-radius: 32px;
+    background-color: rgba(255, 255, 255, 0.95);
+    height: calc(100vh - 60px);
+    width: 100%;
+    padding-top: 10px;
+    box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+    z-index: 999;
+    animation:window-open 0.5s 1;
+    /* -webkit-transition: all 0.4s ease-in;
+    transition: all 0.4s ease-in; */
+
+
+}
+
+
+@keyframes window-open
+    {
+       0% {
+           bottom:-15.5rem;
+       }
+       100% {
+           bottom:0;
+       }
+    }
 
 </style>

@@ -155,8 +155,12 @@ export default {
         postPartnersResult(res) {
             if(res.code != 200){
                 Toast({
-                        message: '合资人信息保存出错',
+                        message: '合资人信息保存出错:'+res.message,
                     });
+            }else {
+                Toast({
+                    message: '修改成功',
+                });
             }
         },
 
@@ -183,7 +187,7 @@ export default {
          */
         putPartnersResult(res) {
             if(res.code != 200){
-            Toast({
+                Toast({
                     message: '合资人信息保存出错',
                 });
             }else {
@@ -202,7 +206,7 @@ export default {
             if(this.vehicleId){
                 // 在这里引入提交的内容
                 this.deletePartners() // 删除合伙人信息
-                this.saveIndicator()
+                // this.saveIndicator()
             }
         },
 

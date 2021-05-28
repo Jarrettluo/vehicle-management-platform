@@ -13,7 +13,7 @@
                 placeholder="输入车牌搜索" @keyup.enter="tapToSearch">
             </form>
         </div>
-
+        {{ saleItemData }}
         <div class="searchList">
             <ul style="list-style-type:none">
                 <li v-for="(item, index) in searchList" :key="index" @click="linkTo(item.id)">
@@ -170,7 +170,7 @@ export default {
                 partnerPrice: null, // partnerPrcie 合伙人总的出资
                 partnerProfit: null,
                 selfProfit: null,
-                saleDate: new Date(),
+                saleDate: null,
                 vehicleId: null,
                 clearState: null,
             },
@@ -289,7 +289,6 @@ export default {
          * @since: 2021年1月19日
          */
         async acquireSaleItemData(){
-            console.log("++++++8888888888888888888888++++++++")
             await salePageRequest.saleItemRequest('GET', {}, {}, "/"+this.vehicleId)
                 .then(res => {
                     this.updateSaleItemDate(res)
@@ -305,7 +304,6 @@ export default {
          * @since: 2021年1月19日
          */
         updateSaleItemDate(res) {
-            console.log("++++++++++++++++++++++++++++++")
             if (res.code === 200) {
                 if(res.data){
                     var saleData = res.data
@@ -328,7 +326,7 @@ export default {
          */
         clickUpload() {
             if(this.vehicleInfo.id && this.saleItemData.salePrice){
-                if(this.saleItemData.id){
+                if(this.saleItemData.id != null){
                     this.putSaleItemDate()
                 }else {
                     this.uploadSaleItemDate()
@@ -350,6 +348,7 @@ export default {
             }else{
                 this.saleItemData.clearState = 0
             }
+            this.saleItemData.saleDate = new Date();
             await salePageRequest.saleItemRequest('POST', {}, this.saleItemData, "")
                 .then(res => {
                     this.postResult(res)
@@ -383,6 +382,7 @@ export default {
             }else{
                 this.saleItemData.clearState = 0
             }
+            if(this.saleItemData.id == null) return false;
             await salePageRequest.saleItemRequest('PUT', {}, this.saleItemData, "")
                 .then(res => {
                     this.updateResult(res)
@@ -399,10 +399,11 @@ export default {
          */
         updateResult(res) {
             if(res.code==200) {
-                this.saleItemData.id = res.data
+                // this.saleItemData.id = res.data
                 Toast("" + this.vehicleInfo.vehiclePlate + "修改成功")
+                this.acquireSaleItemData()
             }else {
-                Toast("提交失败！")
+                Toast("提交失败！:" + res.message)
             }
         },
 
@@ -634,7 +635,6 @@ export default {
             }
         },
         floatingTap() {
-            // console.log('aaaa');
             this.showCalc = !this.showCalc
         },
 

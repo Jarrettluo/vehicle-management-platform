@@ -11,7 +11,7 @@
             <h4 style="color: #1f4e79">年度报表</h4>
             <div class="report-item shadow-sm" style="background-color: #ff6666">
                 <div class="report-value">
-                    <h3>{{ statisticsData.totalSales }}</h3>
+                    <h3>{{ statisticsData.totalSales?statisticsData.totalSales:0.00 }}</h3>
                 </div>
                 <div class="report-name">
                     累计销售额（元）
@@ -19,7 +19,7 @@
             </div>
             <div class="report-item shadow-sm" style="background-color: #ff9900">
                 <div class="report-value">
-                    <h3>{{ statisticsData.totalProfit }}</h3>
+                    <h3>{{ statisticsData.totalProfit?statisticsData.totalProfit:0.00 }}</h3>
                 </div>
                 <div class="report-name">
                     累计利润（元）
