@@ -57,7 +57,6 @@
 						this.updateLoginResult(res)
 					})
 					.catch(err => {
-						console.log(err)
 						Toast({
 							message: '登录失败',
 							position: 'bottom',
@@ -67,7 +66,6 @@
 			},
 			updateLoginResult(res){
 				if(res.code == 200){
-					console.log(res.data)
 					sessionStorage.setItem("token", res.data.token);
 					sessionStorage.setItem("userId", res.data.user.id);
 					sessionStorage.setItem("username", res.data.user.username);

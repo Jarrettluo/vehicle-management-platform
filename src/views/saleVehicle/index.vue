@@ -13,7 +13,6 @@
                 placeholder="输入车牌搜索" @keyup.enter="tapToSearch">
             </form>
         </div>
-        {{ saleItemData }}
         <div class="searchList">
             <ul style="list-style-type:none">
                 <li v-for="(item, index) in searchList" :key="index" @click="linkTo(item.id)">
@@ -326,6 +325,10 @@ export default {
          */
         clickUpload() {
             if(this.vehicleInfo.id && this.saleItemData.salePrice){
+                if(this.saleItemData.salePrice > 10000000) {
+                    Toast("售车价过大！")
+                    return false;
+                }
                 if(this.saleItemData.id != null){
                     this.putSaleItemDate()
                 }else {

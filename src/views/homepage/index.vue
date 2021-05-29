@@ -184,7 +184,6 @@ export default {
        * 轮播图切换页面
        */
       IMGChange(index){  //参数为当前轮播图的索引 
-        // console.log(index)
       },
 
       jumpToSettingPage() {

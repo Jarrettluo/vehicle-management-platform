@@ -28,7 +28,7 @@
                 <mt-field label="购车时间" placeholder="选择购车时间" type="date" v-model="vehicleInfo.purchaseDate" >
                 </mt-field>
                 <mt-field label="购车价格" placeholder="请输入购车价格（元）" v-model="vehicleInfo.purchasePrice" 
-                :attr="{ min: 0, max: 10000000 }" @blur.native.capture="test(vehicleInfo.purchasePrice)">
+                :attr="{ maxlength: 10 }" @blur.native.capture="test(vehicleInfo.purchasePrice)">
                 </mt-field>
 
                 <!-- type="number"  -->
@@ -242,13 +242,6 @@ export default {
 
         getCamera: function(){  
             Toast("打开照相机，暂时不可用")
-            // 
-            // if(window.plus){  
-            //     this.camera();  
-            // } else {
-            //     console.log("摄像头不能用")
-            // }
-            // this.camera()
              
         },  
         getLibrary: function(){  
@@ -262,7 +255,6 @@ export default {
             var cmr = plus.camera.getCamera(); //获取摄像头管理对象
             var res = cmr.supportedImageResolutions[0]; //字符串数组，摄像头支持的拍照分辨率
             var fmt = cmr.supportedImageFormats[0]; //字符串数组，摄像头支持的拍照文件格式
-            console.log("拍照分辨率: " + res + ", 拍照文件格式: " + fmt);
             cmr.captureImage(function(path) {
                 //进行拍照操作
                 // 通过URL参数获取目录对象或文件对象
@@ -322,8 +314,12 @@ export default {
          */
         async postVehicleInfo(){
             let data = this.vehicleInfo
-            data.purchasePrice = Number.parseInt(this.vehicleInfo.purchasePrice)
-            await vehiclePageRequest.vehicleRequest('POST', {}, this.vehicleInfo, '')
+            data.purchasePrice = Number.parseInt(this.vehicleInfo.purchasePrice.replace(/,/g,""))
+            if(data.purchasePrice > 10000000) {
+                Toast("购车价太大，无法保存！")
+                return false;
+            }
+            await vehiclePageRequest.vehicleRequest('POST', {}, data, '')
                 .then(res => {
                     this.newUpdateVehicleInfo(res)
                 })
@@ -354,16 +350,35 @@ export default {
 
 
         /**
-         * 异步提交数据给后天
+         * @description 异步提交数据给后台
+         * @author 罗佳瑞
+         * @since 2021年5月29日
          */
         async putVehicleInfo(){
-            await vehiclePageRequest.vehicleRequest('POST', {}, {}, "")
+            let data = this.vehicleInfo
+            data.purchasePrice = Number.parseInt(this.vehicleInfo.purchasePrice.replace(/,/g,""))
+            if(data.purchasePrice > 10000000) {
+                Toast("购车价太大，无法保存！")
+                return false;
+            }
+            await vehiclePageRequest.vehicleRequest('PUT', {}, data, "/"+data.id)
                 .then(res => {
-                    this.newUpdateVehicleInfo(res)
+                    this.updatePutVehicleInfo(res)
                 })
                 .catch(err => {
                     Toast("" + err)
                 })
+        },
+        updatePutVehicleInfo(res){
+            if(res.code === 200 ){
+                Toast({
+                    message: '操作成功',
+                    iconClass: 'icon icon-success',
+                    position: 'bottom',
+                });
+            } else {
+                Toast("" + res.message)
+            }
         },
 
         /**
@@ -505,6 +520,7 @@ export default {
         },
 
         test(value){
+            if(value == null) return false;
             value = value.replace(/[^\d.]/g, ''); // 清除"数字"和"."以外的字符
             value = value.replace(/^\./g, ''); // 验证第一个字符是数字而不是.
             value = value.replace(/\.{2,}/g, '.'); // 只保留第一个. 清除多余的
