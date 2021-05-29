@@ -27,9 +27,11 @@
             <div class="page-part">
                 <mt-field label="购车时间" placeholder="选择购车时间" type="date" v-model="vehicleInfo.purchaseDate" >
                 </mt-field>
-                <mt-field label="购车价格" placeholder="请输入购车价格（元）" type="number" v-model="vehicleInfo.purchasePrice" 
-                :attr="{ min: 0, max: 10000000 }">
+                <mt-field label="购车价格" placeholder="请输入购车价格（元）" v-model="vehicleInfo.purchasePrice" 
+                :attr="{ min: 0, max: 10000000 }" @blur.native.capture="test(vehicleInfo.purchasePrice)">
                 </mt-field>
+
+                <!-- type="number"  -->
             </div>
             <div class="page-part">
                 <mt-field label="备注信息" placeholder="请输入车辆备注信息" type="textarea" rows="1"
@@ -162,6 +164,37 @@ export default {
     watch: {
         '$route': 'getParams'
     },
+
+    filters: {
+        numberPutComma(value) {
+            let installVal = value;
+            if(value != ''){
+                value = Number(value).toFixed(2)
+                let intPart = Math.trunc(value)// 获取整数部分
+                let intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,') // 将整数部分逢三一断
+                let floatPart = '.00' // 预定义小数部分
+                let value2Array = value.split('.')
+                // =2表示数据有小数位
+                if(value2Array.length === 2) {
+                    floatPart = value2Array[1].toString() // 拿到小数部分
+                    if(floatPart.length === 1) { // 补0,实际上用不着
+                        return intPartFormat + '.' + floatPart + '0'
+                    } else {
+                        if(installVal < 0 && intPartFormat == 0){
+                            return '-' + intPartFormat + '.' + floatPart
+                        }else{
+                            return  intPartFormat + '.' + floatPart
+                        }
+                        
+                    }
+                } else {
+                    return intPartFormat + floatPart
+                }
+            }else if(value == 0 && String(value)){
+                return '0.00'
+            }
+        }
+    },
     methods: {
         /**
          * 获取路由参数
@@ -288,6 +321,8 @@ export default {
          * 异步提交数据给后台
          */
         async postVehicleInfo(){
+            let data = this.vehicleInfo
+            data.purchasePrice = Number.parseInt(this.vehicleInfo.purchasePrice)
             await vehiclePageRequest.vehicleRequest('POST', {}, this.vehicleInfo, '')
                 .then(res => {
                     this.newUpdateVehicleInfo(res)
@@ -312,8 +347,8 @@ export default {
 
                 this.$refs.partnerChild.newPostPartner(),
                 this.$refs.preparedChild.newPostPreparedness()
-
-            
+            } else {
+                Toast("" + res.message)
             }
         },
 
@@ -467,6 +502,43 @@ export default {
                     message: "连接超时！"
                 })
             }
+        },
+
+        test(value){
+            value = value.replace(/[^\d.]/g, ''); // 清除"数字"和"."以外的字符
+            value = value.replace(/^\./g, ''); // 验证第一个字符是数字而不是.
+            value = value.replace(/\.{2,}/g, '.'); // 只保留第一个. 清除多余的
+            value = value
+                .replace('.', '$#$')
+                .replace(/\./g, '')
+                .replace('$#$', '.'); // 保证.只出现一次，而不能出现两次以上
+            value = (+value).toFixed(2); // 只能输入两个小数
+            let left = this.format_number(value.split('.')[0]),
+                right = value.split('.')[1];
+            value = left + '.' + right;
+
+            this.$set(this.vehicleInfo, 'purchasePrice', value)
+        },
+
+        // 数值三位以，隔开
+        format_number(n) {
+            var b = parseInt(n).toString();
+            var len = b.length;
+            if (len <= 3) {
+                return b;
+            }
+            var r = len % 3;
+            return r > 0
+                ? b.slice(0, r) +
+                      ',' +
+                      b
+                          .slice(r, len)
+                          .match(/\d{3}/g)
+                          .join(',')
+                : b
+                      .slice(r, len)
+                      .match(/\d{3}/g)
+                      .join(',');
         }
 
 
@@ -573,10 +645,10 @@ a:focus {
     padding-top: 10px;
     box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
     z-index: 999;
-    animation:window-open 0.5s 1;
-    /* -webkit-transition: all 0.4s ease-in;
-    transition: all 0.4s ease-in; */
-
+    animation:window-open 0.2s 1;
+    /* -webkit-transition: all 0.4s ease-in; */
+    /* transition: all 0.2s ease-in; */
+    overflow-y: scroll;
 
 }
 
@@ -584,10 +656,16 @@ a:focus {
 @keyframes window-open
     {
        0% {
-           bottom:-15.5rem;
+           /* bottom:-15.5rem; */
+           top: 800px;
+            /* bottom: -10px; */
        }
+       /* 10% {
+           top: 100px;
+       } */
        100% {
-           bottom:0;
+           /* bottom:0; */
+           top: 60px;
        }
     }
 
