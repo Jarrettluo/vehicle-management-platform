@@ -31,14 +31,14 @@
             </div>
             <div>
                 <mt-cell title="车辆购车价格">
-                    <span>{{ vehicleInfo.purchasePrice }} </span>
+                    <span>{{ vehicleInfo.purchasePrice }}<span v-show="vehicleInfo.purchasePrice">.00元</span></span>
                 </mt-cell>
                 <mt-cell title="合资金额总数">
-                    <span>{{ saleItemData.partnerPrice }} </span>
+                    <span>{{ saleItemData.partnerPrice }}<span v-show="saleItemData.partnerPrice">.00元</span></span>
                     <i @click="openPartnerDetail" class="mintui mintui-back" :class="[rotatePartner?'go':'aa']"></i>
                 </mt-cell>
-                    <div style="width:100%; padding: 5px;" v-if="rotatePartner">
-                        <table border="1" width="100%" class="pure-table">
+                    <div style="width:100%; padding: 5px; font-color: #333;" v-if="rotatePartner">
+                        <table border="1" width="100%" class="pure-table" style="color:#999;font-size:10px;">
                             <tr>
                                 <th>合伙人</th>
                                 <th>投资金额(元)</th>
@@ -46,8 +46,8 @@
                                 <th>收益金额(元)</th>
                             </tr>
                             <tr v-for="(item, index) in partnerList" :key="index">
-                                <td>{{ item.name }}</td>
-                                <td>{{ item.price }}</td>
+                                <td>{{ item.name }} </td>
+                                <td>{{ item.price }} <span v-show="item.price">.00</span></td>
                                 <td>{{ item.ratio }}</td>
                                 <td style="padding: 0px;"><input v-model="item.profit" type="number" style="width:90px;text-align:center;background-color:transparent;"></td>
                                 <!-- <td><NumberInput :point="2" :max="99999" placeholder="请输入金额" v-model.number="item.profit"></NumberInput></td> -->
@@ -56,21 +56,21 @@
                     </div>
                     
                 <mt-cell title="车辆整备价格" >
-                        <span>{{ saleItemData.repairPrice }} </span> <p>  </p>
+                        <span>{{ saleItemData.repairPrice }} <span v-show="saleItemData.repairPrice">.00元</span></span>
                         <i @click="openRepairDetail" class="mintui mintui-back" :class="[rotateRepair?'go':'aa']"></i>
                 </mt-cell>
 
                     <div style="width:100%; padding: 5px;" v-if="rotateRepair">
-                        <table border="1" width="100%" class="pure-table">
+                        <table border="1" width="100%" class="pure-table" style="color:#999;font-size:10px;">
                             <tr>
                                 <th>整备项目</th>
-                                <th>整备金额</th>
+                                <th>整备金额(元)</th>
                                 <th>经手人</th>
                                 <th>操作时间</th>
                             </tr>
                             <tr v-for="(item, index) in prepareList" :key="index">
                                 <td>{{ item.repairItem }}</td>
-                                <td>{{ item.repairPrice }}</td>
+                                <td>{{ item.repairPrice }} <span v-show="item.repairPrice">.00</span></td>
                                 <td>{{ item.handlerName }}</td>
                                 <td>{{ item.handleDate }}</td>
                             </tr>
@@ -556,6 +556,9 @@ export default {
                 // 计算自身的利益
                 this.saleItemData.selfProfit = profit.toFixed(2);
                 this.saleItemData.partnerProfit = allProfit - this.saleItemData.selfProfit
+            } else {
+                Toast("车辆信息不足！");
+                return false;
             }
         },
 
@@ -594,16 +597,12 @@ export default {
          * @since: 2021年1月19日
          */
         async removeSaleItem(){
-
-
             var saleData = this.saleItemData
             if(saleData.clearState){
                 saleData.clearState = 1;
             }else {
                 saleData.clearState = 0;
             }
-
-
             await salePageRequest.saleItemRequest('DELETE', {}, this.saleItemData, "")
                 .then(res => {
                     this.removeResult(res)

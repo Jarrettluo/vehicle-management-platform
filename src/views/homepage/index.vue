@@ -187,7 +187,7 @@ export default {
       },
 
       jumpToSettingPage() {
-        this.indicator3()
+          this.$router.push({path: '/systemSetting'})
       },
 
 
@@ -201,13 +201,13 @@ export default {
        * @author： 罗佳瑞
        */
       indicator3 () {
-          Indicator.open({
-              text: '暂未开放...',
-              spinnerType: 'fading-circle'
-          });
-          setTimeout(()=>{
-              Indicator.close();
-          },1500)
+          // Indicator.open({
+          //     text: '暂未开放...',
+          //     spinnerType: 'fading-circle'
+          // });
+          // setTimeout(()=>{
+          //     Indicator.close();
+          // },1500)
       }
     }
     

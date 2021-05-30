@@ -55,6 +55,15 @@ const router = new Router({
             name: 'saleVehicle',
             component: saleVehicle
         },{
+            path: '/systemSetting',
+            name: 'systemSetting',
+            component: ()=>import("../views/System/index.vue"),
+            children: []
+        },{
+            path: '/systemSetting/accountSetting',
+            name: 'accountSetting',
+            component: ()=>import("../views/System/accountSetting/index.vue"),
+        },{
             path: '/statistics',
             name: 'statistics',
             component: statistics
