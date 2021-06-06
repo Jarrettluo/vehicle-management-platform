@@ -314,7 +314,9 @@ export default {
          */
         async postVehicleInfo(){
             let data = this.vehicleInfo
-            data.purchasePrice = Number.parseInt(this.vehicleInfo.purchasePrice.replace(/,/g,""))
+            if (typeof(this.vehicleInfo.purchasePrice) == "string"){
+                data.purchasePrice = Number.parseInt(this.vehicleInfo.purchasePrice.replace(/,/g,""))
+            }
             if(data.purchasePrice > 10000000) {
                 Toast("购车价太大，无法保存！")
                 return false;
@@ -356,7 +358,9 @@ export default {
          */
         async putVehicleInfo(){
             let data = this.vehicleInfo
-            data.purchasePrice = Number.parseInt(this.vehicleInfo.purchasePrice.replace(/,/g,""))
+            if (typeof(this.vehicleInfo.purchasePrice) == "string"){
+                data.purchasePrice = Number.parseInt(this.vehicleInfo.purchasePrice.replace(/,/g,""))
+            }
             if(data.purchasePrice > 10000000) {
                 Toast("购车价太大，无法保存！")
                 return false;

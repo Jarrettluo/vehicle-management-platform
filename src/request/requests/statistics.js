@@ -15,7 +15,7 @@ function statisticsRequest() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                // token: sessionStorage.getItem('token')
+                'token': sessionStorage.getItem('token')
             },
             params:{},
             data:{},

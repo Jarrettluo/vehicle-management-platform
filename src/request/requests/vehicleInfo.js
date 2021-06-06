@@ -15,7 +15,7 @@ function vehicleRequest(method, params, data, pathVariale) {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                // token: sessionStorage.getItem('token')
+                token: sessionStorage.getItem('token')
             },
             params: params,
             data: data,
@@ -44,7 +44,7 @@ function partnerRequest(method, params, data, path) {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                // token: sessionStorage.getItem('token')
+                token: sessionStorage.getItem('token')
             },
             params: params,
             data: data,
@@ -73,7 +73,7 @@ function preparednessRequest(method, params, data, path) {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                // token: sessionStorage.getItem('token')
+                token: sessionStorage.getItem('token')
             },
             params: params,
             data: data,
@@ -96,7 +96,7 @@ function recorgnizeRequest(FormData) {
             method: 'POST',
             headers: {
                 'Content-Type': "multipart/form-data",
-                // token: sessionStorage.getItem('token')
+                token: sessionStorage.getItem('token')
             },
             //这部分非常重要，否则formdata会被转格式
             transformRequest: [function(){
