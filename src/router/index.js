@@ -63,6 +63,10 @@ const router = new Router({
             path: '/systemSetting/accountSetting',
             name: 'accountSetting',
             component: ()=>import("../views/System/accountSetting/index.vue"),
+        },,{
+            path: '/systemSetting/systemLog',
+            name: 'systemLog',
+            component: ()=>import("../views/System/systemLog/index.vue"),
         },{
             path: '/statistics',
             name: 'statistics',

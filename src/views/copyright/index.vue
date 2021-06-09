@@ -12,7 +12,7 @@
         </div>
         <div class="info-page">
             <div class="title">
-                车管家 <small>v1.0.3</small>
+                车管家 <small>v1.0.4</small>
             </div>
             <div>成都樱桃智库科技有限公司</div>
             <div>联系电话：+86 150-0820-1329</div>

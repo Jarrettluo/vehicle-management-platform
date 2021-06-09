@@ -8,28 +8,37 @@
         </mt-header>
 
         <div class="cell-group">
+            <div class="cell-title">
+                <span>账号设置</span>
+            </div>
             <div class="cell-group-item">
                 <mt-cell 
                 title="账号设置" 
                 to="/systemSetting/accountSetting"
                 is-link>
                 </mt-cell>
+                <!-- <mt-cell 
+                title="修改密码" 
+                to="/systemSetting/accountSetting"
+                is-link>
+                </mt-cell> -->
+            </div>
+            <div class="cell-title">
+                <span>通用功能</span>
+            </div>
+            <div class="cell-group-item">
+                <mt-cell 
+                title="查看日志" 
+                to="/systemSetting/systemLog"
+                is-link>
+                </mt-cell>
+                <!-- <mt-cell 
+                title="修改密码" 
+                to="/systemSetting/accountSetting"
+                is-link>
+                </mt-cell> -->
             </div>
         </div>
-
-            <!-- <mt-cell 
-            title="标题文字" 
-            icon="success" 
-            value="带 icon"
-            to="//github.com"
-            is-link></mt-cell>
-        <mt-cell 
-            title="标题文字" 
-            icon="success" 
-            value="带 icon"
-            to="//github.com"
-            is-link>
-        </mt-cell> -->
     </div>
 </template>
 
@@ -56,5 +65,13 @@ export default {
 
     .cell-group {
         padding: 10px;
+    }
+
+    .cell-title {
+        font-size: 1.5em;
+        padding: 10px 0px 5px 10px;
+        background-color: #eee;
+        border-radius: 6px;
+        margin: 20px 0px 5px 0px;
     }
 </style>

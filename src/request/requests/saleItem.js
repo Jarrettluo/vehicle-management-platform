@@ -15,7 +15,7 @@ function saleItemRequest(method, params, data, pathVariable) {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                // token: sessionStorage.getItem('token')
+                token: sessionStorage.getItem('token')
             },
             params: params,
             data: data,

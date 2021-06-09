@@ -1,24 +1,24 @@
 import axios from 'axios'
 
 import {
-	SEARCH_URL
-} from '../urls/searchPage.js'
+	LOG_URL
+} from '../urls/system'
 
 
 /**
- * 车辆信息
+ * 查询统计数据
  */
-function searchRequest(params) {
+function logRequest() {
     return new Promise((resolve, reject) => {
         axios({
-            url: SEARCH_URL,
+            url: LOG_URL,
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                token: sessionStorage.getItem('token')
+                'token': sessionStorage.getItem('token')
             },
-            params: params,
-            data: {},
+            params:{},
+            data:{},
         })
         .then((res) => {
             // 成功
@@ -32,5 +32,5 @@ function searchRequest(params) {
 }
 
 export default {
-    searchRequest
+	logRequest,
 }
