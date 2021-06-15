@@ -68,10 +68,11 @@ export default {
     }
 
     .cell-title {
-        font-size: 1.5em;
+        font-size: 1em;
+        font-weight: 400;
         padding: 10px 0px 5px 10px;
         background-color: #eee;
         border-radius: 6px;
-        margin: 20px 0px 5px 0px;
+        margin: 10px 0px 5px 0px;
     }
 </style>

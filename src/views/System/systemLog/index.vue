@@ -8,19 +8,23 @@
         </mt-header>
 
         <ul class="log-group">
-            <li v-for="operateLog in operateLogList">
+            <li v-for="(operateLog, index) in operateLogList" :key="index">
                 <div class="log-item">
-                    <span class="log-user ">
-                    {{ operateLog.userCode}}
-                    </span>
-                    <span class="log-time">
-                        {{operateLog.operationTime | dateFormat}}
-                    </span>
-                    <br/>
-                    <span class="log-type">{{ operateLog.type }}</span>
-                    <span class="log-model">{{ operateLog.model }}</span>
-                    <span class="log-model">{{operateLog.result | state}}</span>
-                    <span class="log-ip">{{ operateLog.ip }}</span>
+                    <div class="log-title">
+                        <span class="log-user ">
+                            {{ operateLog.userCode}}
+                        </span>
+                        <span class="log-time">
+                            {{operateLog.operationTime | dateFormat}}
+                        </span>                        
+                    </div>
+                    <div class="log-msg">
+                        <span class="log-type">{{ operateLog.type }}</span>
+                        <span class="log-model">{{ operateLog.model }}</span>
+                        <span class="log-status" :class="[operateLog.result == 200 ?'log-status-success':'log-status-failed']">
+                            {{operateLog.result | state}}</span>
+                        <span class="log-ip">{{ operateLog.ip }}</span>                        
+                    </div>
                 </div>
             </li>
         </ul>
@@ -105,26 +109,36 @@ export default {
         justify-content: center; */
     }
 
-    .log-user {
-        font-size: 16px;
-
+    .log-title {
+        font-size: 1rem;
     }
-
     .log-time {
-        font-size: 12px;
         float: right;
         color: #999;
     }
-    .log-type, .log-model, .log-ip{
-        font-size: 8px;
+
+    .log-msg {
+        font-size: 0.75rem;
     }
-    .log-model {
-        margin-left: 10px;
-        text-align: center;
+
+    .log-status{
+        color: #fff;
+        border-radius: 2px;
+        padding: 1px 2px;
     }
+    
+    .log-status-failed {
+        background-color: tomato ;
+    }
+
+    .log-status-success {
+        background-color: yellowgreen;
+    }
+
     .log-ip {
         float: right;
     }
+
     ul {
         list-style-type: none;   
         margin: 0;   
