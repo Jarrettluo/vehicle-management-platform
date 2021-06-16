@@ -99,9 +99,6 @@ export default {
     a:focus {
         text-decoration: none !important;
     }
-    .log-group {
-
-    }
 
     .log-item {
         padding: 5px 15px;

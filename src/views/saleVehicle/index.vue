@@ -60,43 +60,69 @@
                         <i @click="openRepairDetail" class="mintui mintui-back" :class="[rotateRepair?'go':'aa']"></i>
                 </mt-cell>
 
-                    <div style="width:100%; padding: 5px;" v-if="rotateRepair">
-                        <table border="1" width="100%" class="pure-table" style="color:#999;font-size:10px;">
-                            <tr>
-                                <th>整备项目</th>
-                                <th>整备金额(元)</th>
-                                <th>经手人</th>
-                                <th>操作时间</th>
-                            </tr>
-                            <tr v-for="(item, index) in prepareList" :key="index">
-                                <td>{{ item.repairItem }}</td>
-                                <td>{{ item.repairPrice }} <span v-show="item.repairPrice">.00</span></td>
-                                <td>{{ item.handlerName }}</td>
-                                <td>{{ item.handleDate }}</td>
-                            </tr>
-                        </table>
-                    </div>
+                <div style="width:100%; padding: 5px;" v-if="rotateRepair">
+                    <table border="1" width="100%" class="pure-table" style="color:#999;font-size:10px;">
+                        <tr>
+                            <th>整备项目</th>
+                            <th>整备金额(元)</th>
+                            <th>经手人</th>
+                            <th>操作时间</th>
+                        </tr>
+                        <tr v-for="(item, index) in prepareList" :key="index">
+                            <td>{{ item.repairItem }}</td>
+                            <td>{{ item.repairPrice }} <span v-show="item.repairPrice">.00</span></td>
+                            <td>{{ item.handlerName }}</td>
+                            <td>{{ item.handleDate }}</td>
+                        </tr>
+                    </table>
+                </div>
+
+
                 <div class="page-field-wrapper">
                     <div style="margin-top: 10px;" class="page-part">
-                    <form action="javascript:void 0">
-                        <mt-cell title="售车价格" >
-                            <input type="number" placeholder="输入售车价格" v-model="saleItemData.salePrice" @keyup.enter="tapToTrriger"
-                            min:0 max:10000000>
-                        </mt-cell>
-                        <mt-cell title="销售提成比例(%)">
-                            <input type="number" placeholder="输入提车比例" v-model="saleItemData.commissionRate" @keyup.enter="tapToTrriger">
-                        </mt-cell>
-                        <mt-cell title="销售提成">
-                            <input type="number" placeholder="输入销售提成" v-model="saleItemData.commissionPrice" @keyup.enter="tapToTrriger">
-                        </mt-cell>
-                        <mt-cell title="公司利润">
-                            <span style="color: red">{{ saleItemData.selfProfit }}</span>
-                        </mt-cell>
-                        <mt-cell title="是否结账">
-                            <mt-switch v-model="vClearState"></mt-switch>
-                        </mt-cell>
-                    </form>
-                </div>
+                        <form action="javascript:void 0">
+                            <mt-cell title="售车价格" >
+                                <input type="number" placeholder="输入售车价格" v-model="saleItemData.salePrice" @keyup.enter="tapToTrriger"
+                                min:0 max:10000000>
+                            </mt-cell>
+                            <mt-cell title="销售提成比例(%)">
+                                <input type="number" placeholder="输入提车比例" v-model="saleItemData.commissionRate" @keyup.enter="tapToTrriger">
+                            </mt-cell>
+                            <mt-cell title="销售提成">
+                                <input type="number" placeholder="输入销售提成" v-model="saleItemData.commissionPrice" @keyup.enter="tapToTrriger">
+                            </mt-cell>
+
+                            <mt-cell title="其他收入">
+                                <span>{{ sumOtherIncome }}</span>
+                                <i @click="openOtherIncome" class="mintui mintui-back" :class="[rotateOtherIncome?'go':'aa']"></i>
+                            </mt-cell>
+                            <div v-show="rotateOtherIncome" style="background-color:#fff;">
+                                <mt-cell title="按揭返款">
+                                    <input 
+                                    type="number"
+                                    placeholder="输入按揭返款"
+                                    v-model="mortgageRebateValue" 
+                                    oninput="if(value>100000)value=100000;if(value.length>6)value=value.slice(0,6);if(value<0)value=0">
+                                </mt-cell>
+                                <mt-cell title="保险退费">
+                                    <input 
+                                    type="number" 
+                                    placeholder="输入保险退费" 
+                                    v-model="insuranceRefundValue"
+                                    oninput="if(value>100000)value=100000;if(value.length>6)value=value.slice(0,6);if(value<0)value=0"
+                                    required>
+                                </mt-cell>                     
+                            </div>
+
+
+                            <mt-cell title="公司利润">
+                                <span style="color: red">{{ saleItemData.selfProfit }}</span>
+                            </mt-cell>
+                            <mt-cell title="是否结账">
+                                <mt-switch v-model="vClearState"></mt-switch>
+                            </mt-cell>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div style="padding:0px 10px">
@@ -189,6 +215,10 @@ export default {
             rotatePartner: false, // 旋转合作伙伴
 
             showCalc: false,
+
+            mortgageRebateValue: 0, // 按揭返款
+            insuranceRefundValue: 0, // 保险退费
+            rotateOtherIncome: false, // 是否宣传其他收入的项目
         }
     },
     created() {
@@ -197,6 +227,11 @@ export default {
     },
     mounted() {
         this.judgeParams()
+    },
+    computed: {
+        sumOtherIncome:function () {
+            return parseFloat(this.mortgageRebateValue)+parseFloat(this.insuranceRefundValue);	
+        },
     },
     methods: {
         /**
@@ -639,7 +674,12 @@ export default {
         floatingTap() {
             this.showCalc = !this.showCalc
         },
-
+        /**
+         * @description 点击旋转按钮以后就翻转boolean
+         */
+        openOtherIncome() {
+            this.rotateOtherIncome = !this.rotateOtherIncome; // 翻转其他收入的显示细节
+        }
 
     }
 }
