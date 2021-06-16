@@ -81,7 +81,7 @@ export default {
          */
         updateStatisticsDate(res) {
             if (res.code === 200) {
-                this.operateLogList = res.data
+                this.operateLogList = res.data.reverse(); // 翻转列表
             } else {
                 Toast("获取失败，检查网络")
             }
