@@ -30,30 +30,31 @@
                 </mt-cell>
             </div>
             <div>
-                <mt-cell title="车辆购车价格">
+                <!-- <mt-cell title="">
                     <span>{{ vehicleInfo.purchasePrice }}<span v-show="vehicleInfo.purchasePrice">.00元</span></span>
-                </mt-cell>
-                <mt-cell title="合资金额总数">
-                    <span>{{ saleItemData.partnerPrice }}<span v-show="saleItemData.partnerPrice">.00元</span></span>
+                </mt-cell> -->
+                <mt-cell title="车辆购车价格">
+                    <!-- <span>{{ saleItemData.partnerPrice }}<span v-show="saleItemData.partnerPrice">.00元</span></span> -->
+                    <span>{{ vehicleInfo.purchasePrice }}<span v-show="vehicleInfo.purchasePrice">.00元</span></span>
                     <i @click="openPartnerDetail" class="mintui mintui-back" :class="[rotatePartner?'go':'aa']"></i>
                 </mt-cell>
-                    <div style="width:100%; padding: 5px; font-color: #333;" v-if="rotatePartner">
-                        <table border="1" width="100%" class="pure-table" style="color:#999;font-size:10px;">
-                            <tr>
-                                <th>合伙人</th>
-                                <th>投资金额(元)</th>
-                                <th>投资比例(%)</th>
-                                <th>收益金额(元)</th>
-                            </tr>
-                            <tr v-for="(item, index) in partnerList" :key="index">
-                                <td>{{ item.name }} </td>
-                                <td>{{ item.price }} <span v-show="item.price">.00</span></td>
-                                <td>{{ item.ratio }}</td>
-                                <td style="padding: 0px;"><input v-model="item.profit" type="number" style="width:90px;text-align:center;background-color:transparent;"></td>
-                                <!-- <td><NumberInput :point="2" :max="99999" placeholder="请输入金额" v-model.number="item.profit"></NumberInput></td> -->
-                            </tr>
-                        </table>
-                    </div>
+                <div style="width:100%; padding: 5px; font-color: #333;" v-if="rotatePartner">
+                    <table border="1" width="100%" class="pure-table" style="color:#999;font-size:10px;">
+                        <tr>
+                            <th>出资人</th>
+                            <th>投资金额(元)</th>
+                            <th>投资比例(%)</th>
+                            <th>收益金额(元)</th>
+                        </tr>
+                        <tr v-for="(item, index) in partnerList" :key="index">
+                            <td>{{ item.name }} </td>
+                            <td>{{ item.price }} <span v-show="item.price">.00</span></td>
+                            <td>{{ item.ratio }}</td>
+                            <td style="padding: 0px;"><input v-model="item.profit" type="number" style="width:90px;text-align:center;background-color:transparent;"></td>
+                            <!-- <td><NumberInput :point="2" :max="99999" placeholder="请输入金额" v-model.number="item.profit"></NumberInput></td> -->
+                        </tr>
+                    </table>
+                </div>
                     
                 <mt-cell title="车辆整备价格" >
                         <span>{{ saleItemData.repairPrice }} <span v-show="saleItemData.repairPrice">.00元</span></span>
@@ -79,7 +80,7 @@
 
 
                 <div class="page-field-wrapper">
-                    <div style="margin-top: 10px;" class="page-part">
+                    <div style="margin: 10px 0px;" class="page-part">
                         <form action="javascript:void 0">
                             <mt-cell title="售车价格" >
                                 <input type="number" placeholder="输入售车价格" v-model="saleItemData.salePrice" @keyup.enter="tapToTrriger"
@@ -96,32 +97,34 @@
                                 <span>{{ sumOtherIncome }}</span>
                                 <i @click="openOtherIncome" class="mintui mintui-back" :class="[rotateOtherIncome?'go':'aa']"></i>
                             </mt-cell>
-                            <div v-show="rotateOtherIncome" style="background-color:#fff;">
-                                <mt-cell title="按揭返款">
-                                    <input 
-                                    type="number"
-                                    placeholder="输入按揭返款"
-                                    v-model="mortgageRebateValue" 
-                                    oninput="if(value>100000)value=100000;if(value.length>6)value=value.slice(0,6);if(value<0)value=0">
-                                </mt-cell>
-                                <mt-cell title="保险退费">
-                                    <input 
-                                    type="number" 
-                                    placeholder="输入保险退费" 
-                                    v-model="insuranceRefundValue"
-                                    oninput="if(value>100000)value=100000;if(value.length>6)value=value.slice(0,6);if(value<0)value=0"
-                                    required>
-                                </mt-cell>                     
-                            </div>
-
-
-                            <mt-cell title="公司利润">
-                                <span style="color: red">{{ saleItemData.selfProfit }}</span>
-                            </mt-cell>
-                            <mt-cell title="是否结账">
-                                <mt-switch v-model="vClearState"></mt-switch>
-                            </mt-cell>
+                            <transition name="draw">   <!--这里的name 和 css 类名第一个字段要一样-->
+                                <div v-show="rotateOtherIncome" style="background-color:#fff;">
+                                    <mt-cell title="按揭返款">
+                                        <input 
+                                        type="number"
+                                        placeholder="输入按揭返款"
+                                        v-model="mortgageRebateValue" 
+                                        oninput="if(value>100000)value=100000;if(value.length>6)value=value.slice(0,6);if(value<0)value=0">
+                                    </mt-cell>
+                                    <mt-cell title="保险退费">
+                                        <input 
+                                        type="number" 
+                                        placeholder="输入保险退费" 
+                                        v-model="insuranceRefundValue"
+                                        oninput="if(value>100000)value=100000;if(value.length>6)value=value.slice(0,6);if(value<0)value=0"
+                                        required>
+                                    </mt-cell>                  
+                                </div>
+                            </transition>
                         </form>
+                    </div>
+                    <div class="page-part">
+                        <mt-cell title="公司利润">
+                            <span style="color: red">{{ saleItemData.selfProfit }}</span>
+                        </mt-cell>
+                        <mt-cell title="是否结账">
+                            <mt-switch v-model="vClearState"></mt-switch>
+                        </mt-cell>
                     </div>
                 </div>
             </div>
@@ -230,6 +233,12 @@ export default {
     },
     computed: {
         sumOtherIncome:function () {
+            if(this.mortgageRebateValue === null || this.mortgageRebateValue < 0 || this.mortgageRebateValue == ""){
+                this.mortgageRebateValue = 0 // 按揭返款
+            }
+            if(this.insuranceRefundValue == null || this.insuranceRefundValue < 0 || this.insuranceRefundValue == "") {
+                this.insuranceRefundValue = 0 // 保险退费
+            }
             return parseFloat(this.mortgageRebateValue)+parseFloat(this.insuranceRefundValue);	
         },
     },
@@ -563,8 +572,10 @@ export default {
 
         tapToTrriger(){
             if(this.saleItemData.salePrice>0 && this.vehicleInfo.purchasePrice > 0){
-                // 计算毛利润，公式为销售价-购车价- 整备金额
-                var grossProfit = this.saleItemData.salePrice - this.vehicleInfo.purchasePrice - this.saleItemData.repairPrice
+
+                // 计算毛利润，公式为销售价 + 按揭返款 + 保险退费 - 购车价 - 整备金额
+                var grossProfit = parseFloat(this.saleItemData.salePrice) + this.sumOtherIncome - this.vehicleInfo.purchasePrice - this.saleItemData.repairPrice
+
                 if(this.saleItemData.commissionPrice > 0){
                     // 计算提成的比例
                     this.saleItemData.commissionRate = (this.saleItemData.commissionPrice * 100)/grossProfit
@@ -832,5 +843,12 @@ a:focus {
     border-radius: 4px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
+
+    .draw-enter-active, .draw-leave-active {
+        transition: all 1s ease;
+    }
+    .draw-enter, .draw-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        height: 0;
+    }
 
 </style>
