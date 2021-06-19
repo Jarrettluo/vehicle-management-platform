@@ -10,7 +10,7 @@
         <div class="search">
             <form class="search-block" action="javascript:void 0">
                 <input v-model="keyword" type="text" class="searchInput"
-                placeholder="输入车牌搜索" @keyup.enter="tapToSearch">
+                placeholder="搜索车辆信息" @keyup.enter="tapToSearch">
             </form>
         </div>
         <div class="searchList">
@@ -407,8 +407,8 @@ export default {
                 this.saleItemData.clearState = 0
             }
             this.saleItemData.saleDate = new Date();
-            this.saleItemData.mortgageRebate = this.mortgageRebateValue
-            this.saleItemData.insuranceRefund = this.insuranceRefundValue
+            this.saleItemData.mortgageRebate = this.mortgageRebateValue // 赋值
+            this.saleItemData.insuranceRefund = this.insuranceRefundValue // 赋值
             await salePageRequest.saleItemRequest('POST', {}, this.saleItemData, "")
                 .then(res => {
                     this.postResult(res)
@@ -534,6 +534,9 @@ export default {
                     Toast("没有查询到相关车辆")
                 }
                 this.searchList = res.data
+            }else {
+                Toast("没有查询到相关车辆")
+                this.searchList = []
             }
         },
 
