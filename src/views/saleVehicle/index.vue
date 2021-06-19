@@ -84,13 +84,7 @@
                         <form action="javascript:void 0">
                             <mt-cell title="售车价格" >
                                 <input type="number" placeholder="输入售车价格" v-model="saleItemData.salePrice" @keyup.enter="tapToTrriger"
-                                min:0 max:10000000>
-                            </mt-cell>
-                            <mt-cell title="销售提成比例(%)">
-                                <input type="number" placeholder="输入提车比例" v-model="saleItemData.commissionRate" @keyup.enter="tapToTrriger">
-                            </mt-cell>
-                            <mt-cell title="销售提成">
-                                <input type="number" placeholder="输入销售提成" v-model="saleItemData.commissionPrice" @keyup.enter="tapToTrriger">
+                                oninput="if(value>10000000)value=1000000;if(value.length>8)value=value.slice(0,8);if(value<0)value=0">
                             </mt-cell>
 
                             <mt-cell title="其他收入">
@@ -116,6 +110,12 @@
                                     </mt-cell>                  
                                 </div>
                             </transition>
+                            <mt-cell title="销售提成比例(%)">
+                                <input type="number" placeholder="输入提车比例" v-model="saleItemData.commissionRate" @keyup.enter="tapToTrriger">
+                            </mt-cell>
+                            <mt-cell title="销售提成">
+                                <input type="number" placeholder="输入销售提成" v-model="saleItemData.commissionPrice" @keyup.enter="tapToTrriger">
+                            </mt-cell>
                         </form>
                     </div>
                     <div class="page-part">
@@ -203,7 +203,7 @@ export default {
                 clearState: null,
             },
 
-            vClearState: false,
+            vClearState: false, // 是否结账的布尔量
 
             vehicleId: null,
 
@@ -221,7 +221,8 @@ export default {
 
             mortgageRebateValue: 0, // 按揭返款
             insuranceRefundValue: 0, // 保险退费
-            rotateOtherIncome: false, // 是否宣传其他收入的项目
+            rotateOtherIncome: false, // 是否旋转其他收入的项目
+
         }
     },
     created() {
@@ -241,6 +242,12 @@ export default {
             }
             return parseFloat(this.mortgageRebateValue)+parseFloat(this.insuranceRefundValue);	
         },
+    },
+    filters: {
+        numFilter (value) {
+            // 截取当前数据到小数点后两位
+            return parseFloat(value).toFixed(2)
+        }
     },
     methods: {
         /**
@@ -344,7 +351,7 @@ export default {
         /**
          * 车辆的销售数据更新到dom，如果正常返回那么就开始计算合伙人和整备的明细
          * @author: 罗佳瑞
-         * @since: 2021年1月19日
+         * @since: 2021年1月19日，2021年6月19日更新
          */
         updateSaleItemDate(res) {
             if (res.code === 200) {
@@ -356,6 +363,9 @@ export default {
                         this.vClearState = false;
                     }
                     this.saleItemData = saleData
+                    this.mortgageRebateValue = saleData.mortgageRebate // 贷款返佣
+                    this.insuranceRefundValue = saleData.insuranceRefund // 保险退费
+
                     this.tapToTrriger()
                 }
             }
@@ -373,10 +383,11 @@ export default {
                     Toast("售车价过大！")
                     return false;
                 }
+                this.tapToTrriger() // 点击销售的时候再次计算一次，避免没有进行激活导致的bug
                 if(this.saleItemData.id != null){
                     this.putSaleItemDate()
                 }else {
-                    this.uploadSaleItemDate()
+                    this.uploadSaleItemData()
                 }
             }else{
                 Toast("请填写完整后提交！")
@@ -388,7 +399,7 @@ export default {
          * @author: 罗佳瑞
          * @since: 2021年1月19日
          */
-        async uploadSaleItemDate(){
+        async uploadSaleItemData(){
             this.saleItemData.vehicleId = this.vehicleInfo.id
             if(this.vClearState == true){
                 this.saleItemData.clearState = 1
@@ -396,6 +407,8 @@ export default {
                 this.saleItemData.clearState = 0
             }
             this.saleItemData.saleDate = new Date();
+            this.saleItemData.mortgageRebate = this.mortgageRebateValue
+            this.saleItemData.insuranceRefund = this.insuranceRefundValue
             await salePageRequest.saleItemRequest('POST', {}, this.saleItemData, "")
                 .then(res => {
                     this.postResult(res)
@@ -404,7 +417,6 @@ export default {
                     Toast("错误：" + err)
                 })
         },
-
         /**
          * 提交销售数据到后台返回的结果
          * @author: 罗佳瑞
@@ -430,6 +442,8 @@ export default {
                 this.saleItemData.clearState = 0
             }
             if(this.saleItemData.id == null) return false;
+            this.saleItemData.mortgageRebate = this.mortgageRebateValue // 新增贷款返佣
+            this.saleItemData.insuranceRefund = this.insuranceRefundValue // 新增保险退费
             await salePageRequest.saleItemRequest('PUT', {}, this.saleItemData, "")
                 .then(res => {
                     this.updateResult(res)
@@ -569,22 +583,33 @@ export default {
                 this.saleItemData.partnerProfit = allProfit - this.saleItemData.selfProfit
             }
         },
-
+        /**
+         * @description 输入车辆的销售价格以后进行计算车辆的各项费用
+         * @since 2021年6月19日
+         */
         tapToTrriger(){
             if(this.saleItemData.salePrice>0 && this.vehicleInfo.purchasePrice > 0){
 
                 // 计算毛利润，公式为销售价 + 按揭返款 + 保险退费 - 购车价 - 整备金额
                 var grossProfit = parseFloat(this.saleItemData.salePrice) + this.sumOtherIncome - this.vehicleInfo.purchasePrice - this.saleItemData.repairPrice
 
-                if(this.saleItemData.commissionPrice > 0){
-                    // 计算提成的比例
-                    this.saleItemData.commissionRate = (this.saleItemData.commissionPrice * 100)/grossProfit
-                }else{
-                    if(this.saleItemData.commissionRate!=null){
-                        // 如果提成金额不存在，那么通过提成比例进行计算
-                        // 售价 减去 购买的价乘以提成系数等于提成金额
-                        this.saleItemData.commissionPrice = (grossProfit)*this.saleItemData.commissionRate * 0.01 
-                    }
+                // if(this.saleItemData.commissionPrice > 0){
+                //     // 计算提成的比例
+                //     this.saleItemData.commissionRate = (this.saleItemData.commissionPrice * 100)/grossProfit
+                // }else{
+                //     if(this.saleItemData.commissionRate!=null){
+                //         // 如果提成金额不存在，那么通过提成比例进行计算
+                //         // 售价 减去 购买的价乘以提成系数等于提成金额
+                //         this.saleItemData.commissionPrice = (grossProfit)*this.saleItemData.commissionRate * 0.01 
+                //     }
+                // }
+                
+                // 修改为按照销售提成的比例进行计算
+                if(this.saleItemData.commissionRate!=null){
+                    // 如果提成金额不存在，那么通过提成比例进行计算
+                    // 售价 减去 购买的价乘以提成系数等于提成金额
+                    let commissionNum = (grossProfit)*this.saleItemData.commissionRate * 0.01 
+                    this.saleItemData.commissionPrice = parseFloat(commissionNum).toFixed(2)
                 }
 
                 // 计算利润, 价格差-合伙人
