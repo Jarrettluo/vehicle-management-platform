@@ -90,7 +90,7 @@
     </div>
     <div :class="partnerVisible || preparedVisible?'dialog-page':''">
         <Partner  ref="partnerChild" v-show="partnerVisible" > </Partner>
-        <Preparednesses ref="preparedChild" v-show="preparedVisible"> </Preparednesses>
+        <Preparednesses ref="preparedChild" v-show="preparedVisible" :partners="partnerList"> </Preparednesses>
     </div>
 
 </div>
@@ -140,7 +140,7 @@ export default {
             partnerVisible: false,
 
             preparedVisible: false,
-
+            partnerList:[],
 
 
         }
@@ -148,6 +148,8 @@ export default {
     components: {
         Partner,
         Preparednesses,
+    },
+    computed:{
     },
     beforeCreate() {
         document.addEventListener('plusready',function() {
@@ -281,8 +283,14 @@ export default {
             this.partnerVisible = !this.partnerVisible
         },
 
+        /**
+         * @description 弹出整备选项
+         * @author 罗佳瑞
+         * @since 2021年6月23日
+         */
         popupPreparedness () {
             this.preparedVisible = !this.preparedVisible
+            this.partnerList = this.$refs.partnerChild.partners // 从子组件中获取全部的合伙人列表
         },
 
 
