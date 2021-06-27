@@ -1,12 +1,14 @@
 <template>
     <div style="padding: 20px 10px 0px 10px">
-        <div v-for='(item,index) in itemcountPrepared' :key="index" :id="'myid'+index" :v-model="preparednesses[index]">
+        <div class="prepared-group" v-for='(item,index) in itemcountPrepared' :key="index" :id="'myid'+index" :v-model="preparednesses[index]">
             <mt-field label="整备项目" placeholder="请输入整备项目名称" type="text" v-model="preparednesses[index].repairItem"
             :attr="{ maxlength: 10 }"></mt-field>
             <mt-field label="整备金额" placeholder="请输入花费金额（元）" type="number" v-model="preparednesses[index].repairPrice"
             :attr="{ min: 0, max: 10000000 }"></mt-field>
-            <mt-field label="经手人" placeholder="请输入经手人姓名" type="text" v-model="preparednesses[index].handlerName"
-            :attr="{ maxlength: 10 }"></mt-field>
+            <mt-field label="经手人" placeholder="请输入经手人姓名" type="button" v-model="preparednesses[index].handlerName"
+            :attr="{ maxlength: 10 }"
+            @click.native="getpopupVisible(index)">
+            </mt-field>
             <mt-field label="整备时间" placeholder="请输入整备时间" type="date" v-model="preparednesses[index].handleDate"></mt-field>
             <hr>
         </div>
@@ -33,6 +35,14 @@
                 <p>- 清空整备项目的信息可以删除掉整备条目。</p>
             </div>
         </div>
+
+        <mt-popup v-model="popupVisible" popup-transition="popup-fade" position="bottom">
+            <div class="picker-toolbar-title">
+                <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
+                <div class="usi-btn-sure" @click="addrConfirm">确定</div>
+            </div>
+            <mt-picker ref='picker' :slots="slots" value-key='name' @change="onValuesChange"></mt-picker>
+        </mt-popup>
         
     </div>
 </template>
@@ -53,8 +63,29 @@ export default {
                 handlerDate: null,
                 id: null,
             }],
+            choosedIndex: null,
+            popupVisible: false,
         }
     },
+    computed:{
+        /**
+         * @description 渲染合伙人的列表
+         */
+        slots(){
+            let array = [{
+                id: 0,
+                name: "万达鑫"
+            }]
+            this.partners.forEach(element => {
+                array.push({
+                    id: element.name,
+                    name: element.name
+                })
+            });
+            return [{values: array}]
+        }
+    },
+    props: ["partners"],
     created() {
         this.getParams()
     },
@@ -209,7 +240,32 @@ export default {
                 })
             }, 1200);
 
-        }
+        },
+        /**
+         * @description 打开弹窗，并赋予当前选中的索引
+         * @since 2021年6月23日
+         * @author 罗佳瑞
+         */
+        getpopupVisible(index) {
+            this.popupVisible = true
+            this.choosedIndex = index // 弹出的索引赋值
+        },
+        /**
+         * @description 为各种数据进行赋值
+         * @author 罗佳瑞
+         * @since 2021年6月23日
+         */
+        onValuesChange(picker, values) {
+            this.username = values[0].name;
+            if(this.username && this.choosedIndex!=null) {
+                this.preparednesses[this.choosedIndex].handlerName = this.username
+            }else {
+                return false
+            }
+        },
+        addrConfirm() {
+            this.popupVisible = false;
+        },
 
     }
 }
@@ -233,5 +289,37 @@ a:focus {
 .information-panel p {
     font-size:12px;
     margin-bottom:4px;
+}
+
+.mint-header {
+  background: #fff;
+  color: #666;
+  font-size: 16px;
+}
+ 
+.mint-popup {
+  width: 100%;
+}
+ 
+.picker-toolbar-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  background: #f5f5f5;
+}
+ 
+.usi-btn-cancel,
+.usi-btn-sure {
+  color: #108EE9;
+}
+
+.mint-cell-value input {
+    text-align: left !important;
+}
+.mint-cell-value {
+    text-align: left !important;
 }
 </style>
