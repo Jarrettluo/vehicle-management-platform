@@ -98,7 +98,8 @@
                                         type="number"
                                         placeholder="输入按揭返款"
                                         v-model="mortgageRebateValue" 
-                                        oninput="if(value>100000)value=100000;if(value.length>6)value=value.slice(0,6);if(value<0)value=0">
+                                        oninput="if(value>100000)value=100000;if(value.length>6)value=value.slice(0,6);if(value<0)value=0"
+                                        >
                                     </mt-cell>
                                     <mt-cell title="保险退费">
                                         <input 
@@ -122,6 +123,27 @@
                         <mt-cell title="公司利润">
                             <span style="color: red">{{ saleItemData.selfProfit }}</span>
                         </mt-cell>
+                        <mt-cell title="出资人分账">
+                                <span>{{ sumOtherIncome }}</span>
+                                <i @click="openOtherIncome" class="mintui mintui-back" :class="[rotateOtherIncome?'go':'aa']"></i>
+                        </mt-cell>
+                        <div style="width:100%; padding: 5px; font-color: #333;" v-if="rotatePartner">
+                            <table border="1" width="100%" class="pure-table" style="color:#999;font-size:10px;">
+                                <tr>
+                                    <th>出资人</th>
+                                    <th>投资金额(元)</th>
+                                    <th>投资比例(%)</th>
+                                    <th>收益金额(元)</th>
+                                </tr>
+                                <tr v-for="(item, index) in partnerList" :key="index">
+                                    <td>{{ item.name }} </td>
+                                    <td>{{ item.price }} <span v-show="item.price">.00</span></td>
+                                    <td>{{ item.ratio }}</td>
+                                    <td style="padding: 0px;"><input v-model="item.profit" type="number" style="width:90px;text-align:center;background-color:transparent;"></td>
+                                    <!-- <td><NumberInput :point="2" :max="99999" placeholder="请输入金额" v-model.number="item.profit"></NumberInput></td> -->
+                                </tr>
+                            </table>
+                        </div>
                         <mt-cell title="是否结账">
                             <mt-switch v-model="vClearState"></mt-switch>
                         </mt-cell>

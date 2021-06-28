@@ -77,10 +77,12 @@ export default {
                 name: "万达鑫"
             }]
             this.partners.forEach(element => {
+                if(element.name){
                 array.push({
                     id: element.name,
                     name: element.name
                 })
+                }
             });
             return [{values: array}]
         }
@@ -110,7 +112,7 @@ export default {
             if(this.vehicleId != null){
                 setTimeout(() => {
                     let vehicleInfo = this.$parent.vehicleInfo
-                    if(vehicleInfo.preparednesses.length){
+                    if(vehicleInfo.preparednesses.length > 0){
                         var preparednesses = vehicleInfo.preparednesses;
                         this.preparednesses = preparednesses;
                         this.itemcountPrepared = preparednesses.length;
@@ -316,10 +318,13 @@ a:focus {
   color: #108EE9;
 }
 
-.mint-cell-value input {
-    text-align: left !important;
+
+.prepared-group >>> input {
+    text-align: left;
+    padding: 0px;
 }
-.mint-cell-value {
-    text-align: left !important;
+
+.prepared-group /deep/ button {
+    text-align: left;
 }
 </style>

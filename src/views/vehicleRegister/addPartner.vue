@@ -82,7 +82,7 @@ export default {
             if(this.vehicleId != null){
                 setTimeout(() => {
                     let vehicleInfo = this.$parent.vehicleInfo;
-                    if(vehicleInfo.partners.length){
+                    if(vehicleInfo.partners.length>0){
                         this.partners = vehicleInfo.partners
                         this.itemcount = this.partners.length;
                     }
