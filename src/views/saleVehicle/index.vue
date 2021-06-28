@@ -119,11 +119,41 @@
                             </mt-cell>
                         </form>
                     </div>
+
+                    <div class="partner-settlement">
+                        <div class="partner-header">
+                            出资人分账
+                            <div class="partner-add" @click="openPartners(); partnerVisable = !partnerVisable"></div>
+                        </div>
+                        <div class="partner-body" v-show="partnerVisable">
+                            <table border="1" width="100%" class="partner-table" style="color:#999;font-size:10px;">
+                                <tr>
+                                    <th>出资人</th>
+                                    <th>出资金额(元)</th>
+                                    <th>整备金额(元)</th>
+                                    <th>总计(元)</th>
+                                </tr>
+                                <tr v-for="(item, index) in partnerList" :key="index">
+                                    <td>{{ item.name }} </td>
+                                    <td>{{ item.price }}<span v-show="item.price">.00</span></td>
+                                    <td>{{ item.ratio }}</td>
+                                    <td style="padding: 0px;"><input v-model="item.profit" type="number" style="width:90px;text-align:center;background-color:transparent;color:#fff;"></td>
+                                    <!-- <td><NumberInput :point="2" :max="99999" placeholder="请输入金额" v-model.number="item.profit"></NumberInput></td> -->
+                                </tr>
+                            </table>
+
+                            <!-- <div class="partner-item">
+                                fjdsljfsldj
+                            </div> -->
+                        </div>
+                    </div>
+
+
                     <div class="page-part">
                         <mt-cell title="公司利润">
                             <span style="color: red">{{ saleItemData.selfProfit }}</span>
                         </mt-cell>
-                        <mt-cell title="出资人分账">
+                        <!-- <mt-cell title="出资人分账">
                                 <span>{{ sumOtherIncome }}</span>
                                 <i @click="openOtherIncome" class="mintui mintui-back" :class="[rotateOtherIncome?'go':'aa']"></i>
                         </mt-cell>
@@ -140,14 +170,17 @@
                                     <td>{{ item.price }} <span v-show="item.price">.00</span></td>
                                     <td>{{ item.ratio }}</td>
                                     <td style="padding: 0px;"><input v-model="item.profit" type="number" style="width:90px;text-align:center;background-color:transparent;"></td>
+                                     -->
                                     <!-- <td><NumberInput :point="2" :max="99999" placeholder="请输入金额" v-model.number="item.profit"></NumberInput></td> -->
-                                </tr>
+                                <!-- </tr>
                             </table>
-                        </div>
+                        </div> -->
                         <mt-cell title="是否结账">
                             <mt-switch v-model="vClearState"></mt-switch>
                         </mt-cell>
                     </div>
+
+                    
                 </div>
             </div>
             <div style="padding:0px 10px">
@@ -244,6 +277,8 @@ export default {
             mortgageRebateValue: 0, // 按揭返款
             insuranceRefundValue: 0, // 保险退费
             rotateOtherIncome: false, // 是否旋转其他收入的项目
+
+            partnerVisable: false, // 合伙人分账是否可见
 
         }
     },
@@ -740,6 +775,31 @@ export default {
          */
         openOtherIncome() {
             this.rotateOtherIncome = !this.rotateOtherIncome; // 翻转其他收入的显示细节
+        },
+        /**
+         * @description 点击合伙人分账
+         */
+        openPartners() {
+            // var tbl = document.getElementsByClassName("partner-header")[0]; // 取到标题
+            // tbl.style.fontSize = "12px";
+            // tbl.style.padding = "15px";
+
+            var tbl = document.getElementsByClassName("partner-table"); // 先获取table
+            var rows = tbl[0].getElementsByTagName("tr"); // 获取里面的行tr
+            for(var i=1;i<rows.length;i++) {  // 遍历里面的行
+                    // var j = parseInt(i/3); // 以每3行为单位,j为：3次0，3次1，3次2 ... 
+                    if(i%5==1){ // 再通过取模来设置每隔3行显示不同的两种颜色
+                        rows[i].style.backgroundColor="#4285f4";
+                    }else if(i%5==2){
+                        rows[i].style.backgroundColor="#34a853";
+                    }else if(i%5==3){
+                        rows[i].style.backgroundColor="#fbbc05";
+                    }else if(i%5==4) {
+                        rows[i].style.backgroundColor="#ea4335";
+                    }else {
+                        rows[i].style.backgroundColor="#fff";
+                    }
+            } 
         }
 
     }
@@ -899,6 +959,83 @@ a:focus {
     }
     .draw-enter, .draw-leave-to /* .fade-leave-active below version 2.1.8 */ {
         height: 0;
+    }
+
+    .partner-settlement {
+        border-radius: 2px;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    }
+    .partner-header {
+        background-color: #fff;
+        padding: 10px;
+        font-size: 16px;
+        font-weight: 400;
+    }
+
+    .partner-add {
+        /* border: 1px solid; */
+        width: 18px;
+        height: 18px;
+        color: #ccc;
+        transition: color .25s;
+        position: relative;
+        float: right;
+    }
+
+    .partner-add::before{
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 16px;
+        margin-left: -10px;
+        margin-top: 3px;
+        border-top: 1px solid;
+    }
+
+    .partner-add::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        height: 16px;
+        margin-left: -3px;
+        margin-top: -4px;
+        border-left: 1px solid;
+    }
+
+    .partner-body {
+        border-top: 0.5px solid #f1f2f3;
+        padding: 5px;
+        margin-top: 0px;
+    }
+
+    .partner-table {
+        padding: 0px;
+        margin: 0px;
+        border: none;
+        border-collapse: separate;
+        border-spacing: 0px 5px;
+    }
+
+    .partner-table td {
+        border: none;
+        font-size: 12px;
+        padding: 5px 0px;
+        margin: 2px 0px;
+        color: #fff;
+        text-align: center;
+    }
+
+    .partner-table th {
+        border: none;
+        font-size: 14px;
+        padding: 0px 0px;
+        text-align: center;
+    }
+
+    .partner-item {
+
     }
 
 </style>
