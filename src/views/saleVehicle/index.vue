@@ -57,7 +57,7 @@
                 </div>
                     
                 <mt-cell title="车辆整备价格" >
-                        <span>{{ saleItemData.repairPrice }} <span v-show="saleItemData.repairPrice">.00元</span></span>
+                        <span>{{ saleItemData.repairPrice }}<span v-show="saleItemData.repairPrice">.00元</span></span>
                         <i @click="openRepairDetail" class="mintui mintui-back" :class="[rotateRepair?'go':'aa']"></i>
                 </mt-cell>
 
@@ -131,13 +131,15 @@
                                     <th>出资人</th>
                                     <th>出资金额(元)</th>
                                     <th>整备金额(元)</th>
+                                    <th>收益金额(元)</th>
                                     <th>总计(元)</th>
                                 </tr>
                                 <tr v-for="(item, index) in partnerList" :key="index">
                                     <td>{{ item.name }} </td>
                                     <td>{{ item.price }}<span v-show="item.price">.00</span></td>
-                                    <td>{{ item.ratio }}</td>
-                                    <td style="padding: 0px;"><input v-model="item.profit" type="number" style="width:90px;text-align:center;background-color:transparent;color:#fff;"></td>
+                                    <td>{{ item.prepare }}</td>
+                                    <td>{{ item.profit }}</td>
+                                    <td style="padding: 0px;"><input v-model="item.total" type="number" style="width:90px;text-align:center;background-color:transparent;color:#fff;"></td>
                                     <!-- <td><NumberInput :point="2" :max="99999" placeholder="请输入金额" v-model.number="item.profit"></NumberInput></td> -->
                                 </tr>
                             </table>
@@ -687,6 +689,9 @@ export default {
                 // 计算自身的利益
                 this.saleItemData.selfProfit = profit.toFixed(2);
                 this.saleItemData.partnerProfit = allProfit - this.saleItemData.selfProfit
+
+                // 计算完以后再计算分账
+                this.openPartners()
             } else {
                 Toast("车辆信息不足！");
                 return false;
@@ -780,26 +785,43 @@ export default {
          * @description 点击合伙人分账
          */
         openPartners() {
-            // var tbl = document.getElementsByClassName("partner-header")[0]; // 取到标题
-            // tbl.style.fontSize = "12px";
-            // tbl.style.padding = "15px";
-
             var tbl = document.getElementsByClassName("partner-table"); // 先获取table
             var rows = tbl[0].getElementsByTagName("tr"); // 获取里面的行tr
             for(var i=1;i<rows.length;i++) {  // 遍历里面的行
                     // var j = parseInt(i/3); // 以每3行为单位,j为：3次0，3次1，3次2 ... 
                     if(i%5==1){ // 再通过取模来设置每隔3行显示不同的两种颜色
                         rows[i].style.backgroundColor="#4285f4";
-                    }else if(i%5==2){
+                    }else if(i%5==4){
                         rows[i].style.backgroundColor="#34a853";
                     }else if(i%5==3){
                         rows[i].style.backgroundColor="#fbbc05";
-                    }else if(i%5==4) {
+                    }else if(i%5==2) {
                         rows[i].style.backgroundColor="#ea4335";
                     }else {
                         rows[i].style.backgroundColor="#fff";
                     }
-            } 
+            }
+            this.partnerList.forEach(item => {
+                item.prepare = 0
+                if(item.profit){
+                    item.total = item.price + parseFloat(item.profit)
+                }else {
+                    item.total = item.price
+                }
+                
+            })
+
+            this.prepareList.forEach(element => {
+                let person = this.partnerList.filter(item => item.name == element.handlerName)[0] // 筛查出该名称
+                if(person){
+                    person.prepare += element.repairPrice
+                    person.total += element.repairPrice
+                }else {
+                    let wandaxin = this.partnerList.filter(item => item.name == "万达鑫")[0] 
+                    wandaxin.prepare += element.repairPrice
+                    wandaxin.total += element.repairPrice
+                }
+            })
         }
 
     }
@@ -1029,7 +1051,7 @@ a:focus {
 
     .partner-table th {
         border: none;
-        font-size: 14px;
+        font-size: 13px;
         padding: 0px 0px;
         text-align: center;
     }
