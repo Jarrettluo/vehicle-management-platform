@@ -56,7 +56,7 @@
                     </table>
                 </div>
                     
-                <mt-cell title="车辆整备价格" >
+                <mt-cell title="车辆整备金额" >
                         <span>{{ saleItemData.repairPrice }}<span v-show="saleItemData.repairPrice">.00元</span></span>
                         <i @click="openRepairDetail" class="mintui mintui-back" :class="[rotateRepair?'go':'aa']"></i>
                 </mt-cell>
@@ -125,13 +125,13 @@
                             出资人分账
                             <div class="partner-add" @click="openPartners(); partnerVisable = !partnerVisable"></div>
                         </div>
-                        <div class="partner-body" v-show="partnerVisable">
+                        <div class="partner-body" v-show="partnerVisable && partnerList.length > 1">
                             <table border="1" width="100%" class="partner-table" style="color:#999;font-size:10px;">
                                 <tr>
                                     <th>出资人</th>
-                                    <th>出资金额(元)</th>
-                                    <th>整备金额(元)</th>
-                                    <th>收益金额(元)</th>
+                                    <th>出资(元)</th>
+                                    <th>整备(元)</th>
+                                    <th>收益(元)</th>
                                     <th>总计(元)</th>
                                 </tr>
                                 <tr v-for="(item, index) in partnerList" :key="index">
