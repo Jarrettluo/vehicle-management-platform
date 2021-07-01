@@ -5,11 +5,20 @@
             :attr="{ maxlength: 10 }"></mt-field>
             <mt-field label="整备金额" placeholder="请输入花费金额（元）" type="number" v-model="preparednesses[index].repairPrice"
             :attr="{ min: 0, max: 10000000 }"></mt-field>
-            <mt-field label="经手人" placeholder="请输入经手人姓名" type="button" v-model="preparednesses[index].handlerName"
-            :attr="{ maxlength: 10 }"
+            <mt-field 
+            label="经手人" 
+            placeholder="请输入经手人姓名" 
+            type="text" 
+            v-model="preparednesses[index].handlerName"
+            readonly
             @click.native="getpopupVisible(index)">
             </mt-field>
-            <mt-field label="整备时间" placeholder="请输入整备时间" type="date" v-model="preparednesses[index].handleDate"></mt-field>
+            <mt-field 
+            label="整备时间" 
+            placeholder="请输入整备时间" 
+            type="date" 
+            v-model="preparednesses[index].handleDate">
+            </mt-field>
             <hr>
         </div>
         <mt-button style="width: 100%" @click="addItemPrepared">
@@ -319,12 +328,12 @@ a:focus {
 }
 
 
-.prepared-group >>> input {
+/* .prepared-group >>> input {
     text-align: left;
     padding: 0px;
 }
 
 .prepared-group /deep/ button {
     text-align: left;
-}
+} */
 </style>
