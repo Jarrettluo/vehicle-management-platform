@@ -83,7 +83,7 @@ export default {
         slots(){
             let array = [{
                 id: 0,
-                name: "万达鑫"
+                name: sessionStorage.getItem("companyAbbreviation")
             }]
             this.partners.forEach(element => {
                 if(element.name){

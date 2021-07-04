@@ -301,6 +301,9 @@ export default {
             }
             return parseFloat(this.mortgageRebateValue)+parseFloat(this.insuranceRefundValue);	
         },
+        companyName:function() {
+            return sessionStorage.getItem("companyAbbreviation")
+        },
     },
     filters: {
         numFilter (value) {
@@ -374,7 +377,7 @@ export default {
                 this.saleItemData.partnerPrice = totalPartnerPrice;
 
                 var selfPrice = this.vehicleInfo.purchasePrice - totalPartnerPrice
-                var selfInvest = {name: "万达鑫", price: selfPrice}
+                var selfInvest = {name: this.companyName, price: selfPrice}
                 this.partnerList.push(selfInvest) // 将自己的投资比例写入到合作伙伴中
 
                 var totalPreparedPrice = 0
@@ -817,7 +820,7 @@ export default {
                     person.prepare += element.repairPrice
                     person.total += element.repairPrice
                 }else {
-                    let wandaxin = this.partnerList.filter(item => item.name == "万达鑫")[0] 
+                    let wandaxin = this.partnerList.filter(item => item.name == this.companyName)[0] 
                     wandaxin.prepare += element.repairPrice
                     wandaxin.total += element.repairPrice
                 }

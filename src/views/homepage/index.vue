@@ -1,7 +1,7 @@
 <template>
 <div class="homepage-container" >
   <div id="header1" class="clearfix">
-    <span class="examplename">万达鑫名车</span>
+    <span class="examplename">{{ companyAbbreviation }}</span>
   </div>
   <div class="imgSwipe" :style="conheight">
     <mt-swipe :auto="4000" @change="IMGChange" > 
@@ -127,8 +127,12 @@ export default {
     created(){
         window.addEventListener('resize', this.getHeight);
         this.getHeight()
-
         this.getPageHeight()
+    },
+    computed: {
+      companyAbbreviation(){
+        return sessionStorage.getItem("companyAbbreviation")
+      }
     },
     methods: {
       /**

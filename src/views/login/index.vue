@@ -24,6 +24,7 @@
 <script>
 	import loginPageRequest from "../../request/requests/loginPage"
 	import { Toast } from 'mint-ui';
+	import { formatDate } from "../../plugin/utils"
 
 	export default {
 		name: "Login",
@@ -65,19 +66,32 @@
 					})
 			},
 			updateLoginResult(res){
+				console.log(res)
 				if(res.code == 200){
 					sessionStorage.setItem("token", res.data.token);
-					sessionStorage.setItem("userId", res.data.user.id);
-					sessionStorage.setItem("username", res.data.user.username);
-					Toast({
-						message: '登录成功',
-						position: 'bottom',
-						duration: 5000
+					sessionStorage.setItem("userId", res.data.userId);
+					sessionStorage.setItem("username", res.data.username);
+					sessionStorage.setItem("expirationTime", res.data.expirationTime)
+					sessionStorage.setItem("companyName", res.data.companyName)
+					sessionStorage.setItem("companyAbbreviation", res.data.companyAbbreviation)
+					let expirationTime = sessionStorage.getItem("expirationTime")
+					var futureTime = new Date(expirationTime);
+					if(futureTime < new Date()) {
+						Toast({
+							message: '您的账号已经于'+ formatDate(futureTime, "yyyy-MM-dd hh:mm:ss") +'失效！请更换账号！',
+							position: 'bottom',
+							duration: 2000
 						});
-					this.$router.push({
-						path: "/homepage"
-					})
-
+					}else {
+						Toast({
+							message: '欢迎您, ' + res.data.companyName + "!",
+							position: 'bottom',
+							duration: 5000
+							});
+						this.$router.push({
+							path: "/homepage"
+						})
+					}
 				}else if(res.code == 1201) {
 					Toast({
 						message: '登录失败,用户不存在',
