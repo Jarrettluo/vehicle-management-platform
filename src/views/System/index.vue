@@ -13,22 +13,32 @@
             </div>
             <div class="cell-group-item">
                 <mt-cell 
-                title="账号设置" 
+                title="全部账号" 
+                to="/systemSetting/allAccount"
+                is-link>
+                </mt-cell>
+                <mt-cell 
+                title="修改密码" 
+                to="/systemSetting/changePassword"
+                is-link>
+                </mt-cell>
+                <mt-cell 
+                title="退出登录" 
                 to="/systemSetting/accountSetting"
                 is-link>
                 </mt-cell>
-                <!-- <mt-cell 
-                title="修改密码" 
-                to="/systemSetting/accountSetting"
-                is-link>
-                </mt-cell> -->
             </div>
             <div class="cell-title">
                 <span>通用功能</span>
             </div>
             <div class="cell-group-item">
                 <mt-cell 
-                title="查看日志" 
+                title="公司信息" 
+                to="/systemSetting/companyInfo"
+                is-link>
+                </mt-cell>
+                <mt-cell 
+                title="操作日志" 
                 to="/systemSetting/systemLog"
                 is-link>
                 </mt-cell>

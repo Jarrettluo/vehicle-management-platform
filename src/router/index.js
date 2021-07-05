@@ -65,10 +65,22 @@ const router = new Router({
             path: '/systemSetting/accountSetting',
             name: 'accountSetting',
             component: ()=>import("../views/System/accountSetting/index.vue"),
-        },,{
+        },{
+            path: '/systemSetting/allAccount',
+            name: 'accountSetting',
+            component: ()=>import("../views/System/accountSetting/allAccount.vue"),
+        },{
+            path: '/systemSetting/changePassword',
+            name: 'accountSetting',
+            component: ()=>import("../views/System/accountSetting/changePassword.vue"),
+        },{
             path: '/systemSetting/systemLog',
             name: 'systemLog',
             component: ()=>import("../views/System/systemLog/index.vue"),
+        },{
+            path: '/systemSetting/companyInfo',
+            name: 'accountSetting',
+            component: ()=>import("../views/System/systemLog/companyInfo.vue"),
         },{
             path: '/statistics',
             name: 'statistics',

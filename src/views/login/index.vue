@@ -74,6 +74,7 @@
 					sessionStorage.setItem("expirationTime", res.data.expirationTime)
 					sessionStorage.setItem("companyName", res.data.companyName)
 					sessionStorage.setItem("companyAbbreviation", res.data.companyAbbreviation)
+					sessionStorage.setItem("companyId", res.data.companyId)
 					let expirationTime = sessionStorage.getItem("expirationTime")
 					var futureTime = new Date(expirationTime);
 					if(futureTime < new Date()) {
