@@ -1,7 +1,10 @@
 import axios from 'axios'
 
 import {
-	LOG_URL, USER_LIST_URL
+	LOG_URL, USER_LIST_URL,
+    CHANGE_USER_PWD_URL,
+    CHANGE_USER_TYPE_URL,
+    DELETE_USER_URL,
 } from '../urls/system'
 
 
@@ -57,8 +60,93 @@ function logRequest() {
         })
     })
 }
+/**
+ * @description 修改用户的密码
+ * @param { Object } params { userId: String, oldPwd: String, newPwd: String} 
+ * @returns 
+ */
+function changePwdRequest(params) {
+    return new Promise((resolve, reject) => {
+        axios({
+            url: CHANGE_USER_PWD_URL,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': sessionStorage.getItem('token')
+            },
+            params: params,
+            data:{},
+        })
+        .then((res) => {
+            // 成功
+            resolve(res.data)
+        })
+        .catch((res) => {
+            // 失败
+            reject(res)
+        })
+    })
+}
+/**
+ * @description 修改用户的角色
+ * @param { Object } params {adminId: String, userId: String} 
+ * @returns 
+ */
+ function changeTypeRequest(data) {
+    return new Promise((resolve, reject) => {
+        axios({
+            url: CHANGE_USER_TYPE_URL,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': sessionStorage.getItem('token')
+            },
+            params: {},
+            data: data,
+        })
+        .then((res) => {
+            // 成功
+            resolve(res.data)
+        })
+        .catch((res) => {
+            // 失败
+            reject(res)
+        })
+    })
+}
+/**
+ * @description 管理员删除用户
+ * @param { Object } params {adminId: String, userId: String} 
+ * @returns 
+ */
+ function deleteUserRequest(params) {
+    return new Promise((resolve, reject) => {
+        axios({
+            url: DELETE_USER_URL,
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': sessionStorage.getItem('token')
+            },
+            params: params,
+            data:{},
+        })
+        .then((res) => {
+            // 成功
+            resolve(res.data)
+        })
+        .catch((res) => {
+            // 失败
+            reject(res)
+        })
+    })
+}
+
 
 export default {
 	logRequest,
-    userListRequest
+    userListRequest,
+    changePwdRequest,
+    changeTypeRequest,
+    deleteUserRequest,
 }
