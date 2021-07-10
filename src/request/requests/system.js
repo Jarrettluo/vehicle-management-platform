@@ -5,11 +5,12 @@ import {
     CHANGE_USER_PWD_URL,
     CHANGE_USER_TYPE_URL,
     DELETE_USER_URL,
+    COMPANY_URL,
 } from '../urls/system'
 
 
 /**
- * 查询统计数据
+ * 查询日志信息
  */
 function logRequest() {
     return new Promise((resolve, reject) => {
@@ -36,7 +37,7 @@ function logRequest() {
 
 
 /**
- * 查询统计数据
+ * 查询用户列表
  */
  function userListRequest(params) {
     return new Promise((resolve, reject) => {
@@ -65,7 +66,7 @@ function logRequest() {
  * @param { Object } params { userId: String, oldPwd: String, newPwd: String} 
  * @returns 
  */
-function changePwdRequest(params) {
+function changePwdRequest(data) {
     return new Promise((resolve, reject) => {
         axios({
             url: CHANGE_USER_PWD_URL,
@@ -74,8 +75,8 @@ function changePwdRequest(params) {
                 'Content-Type': 'application/json',
                 'token': sessionStorage.getItem('token')
             },
-            params: params,
-            data:{},
+            params: {},
+            data:data,
         })
         .then((res) => {
             // 成功
@@ -141,6 +142,33 @@ function changePwdRequest(params) {
         })
     })
 }
+/**
+ * @description 查找公司信息
+ * @param { Object } params {companyId: Long} 
+ * @returns 
+ */
+ function findCompanyRequest(params) {
+    return new Promise((resolve, reject) => {
+        axios({
+            url: COMPANY_URL,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': sessionStorage.getItem('token')
+            },
+            params: params,
+            data:{},
+        })
+        .then((res) => {
+            // 成功
+            resolve(res.data)
+        })
+        .catch((res) => {
+            // 失败
+            reject(res)
+        })
+    })
+}
 
 
 export default {
@@ -149,4 +177,6 @@ export default {
     changePwdRequest,
     changeTypeRequest,
     deleteUserRequest,
+
+    findCompanyRequest,
 }

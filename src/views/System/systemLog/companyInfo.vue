@@ -6,13 +6,13 @@
                 返回</a>
             <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
         </mt-header>
-        <mt-cell title="成都万达鑫">
+        <mt-cell :title="companyVO.companyName">
         </mt-cell>
         <mt-cell title="失效时间" >
-            <span style="color: green">2021年10月30日</span>
+            <span style="color: green">{{companyVO.expirationTime}}</span>
         </mt-cell>
         <mt-cell title="账号数量">
-            <span style="">2</span>
+            <span style="">{{ companyVO.validAccount }}</span>
         </mt-cell>
         <div class="information-panel">
             <div><p>说明信息</p></div>
@@ -23,23 +23,52 @@
             </div>
         </div>
         <div style="width:100%;padding: 5px 10px;">
-           <mt-button type="primary" style="width:100%;">充  值</mt-button> 
+           <mt-button type="primary" style="width:100%;" @click="alterInfo">充  值</mt-button> 
            <!-- <mt-button type="danger" style="width:100%;">充值</mt-button> -->
         </div>
     </div>
 </template>
 
 <script>
+
+import companyRequest from "../../../request/requests/system"
+import { MessageBox } from "mint-ui"
 export default {
     data() {
         return {
-
+            companyVO: {}
         }
+    },
+    mounted() {
+        this.getCompanyInfo()
     },
     methods: {
         goBack(){
             this.$router.go(-1);
         },
+        /**
+         * @description 得到公司信息
+         * @author ljr
+         * @since 2021年7月8日
+         */
+        async getCompanyInfo(){
+            let param = {
+                companyId: sessionStorage.getItem("companyId"),
+            }
+            await companyRequest.findCompanyRequest(param)
+                .then(res => {
+                    if(res.code == 200) {
+                        this.companyVO = res.data
+                        return
+                    }
+                })
+                .catch(res => {
+                    console.log(res)
+                })
+        },
+        alterInfo(){
+            MessageBox('提示', '请联系樱桃智库150-0820-1329');
+        }
     }
 }
 </script>

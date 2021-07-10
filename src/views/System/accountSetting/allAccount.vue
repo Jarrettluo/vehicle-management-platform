@@ -6,14 +6,13 @@
                 返回</a>
             <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
         </mt-header>
-                    {{ adminUser }}
         <div class="account-item" v-for="(account, index) in accountList" :key="index">
             <mt-cell title="登录账号" :value=account.username></mt-cell>
             <mt-cell title="账号类型">
-                <mt-button @click="changeUserType(account)">{{ account.type }}</mt-button>
+                <mt-button @click="changeUserType(account)" :disabled="account.type == 'admin' && account.id == adminUser.id ">{{ account.type | roleType }}</mt-button>
             </mt-cell>
             <mt-cell title="是否删除">
-                <mt-button type="danger" style="width:100%;" :disabled="account.type == 'admin' || account.id == adminUser.id " @click="deleteUser(account.id)"><span> 删  除 </span></mt-button>
+                <mt-button type="danger" style="width:100%;" :disabled="account.type == 'admin' && account.id == adminUser.id " @click="isDeleteUser(account.id)"><span> 删  除 </span></mt-button>
             </mt-cell>   
             <mt-cell title="活动日志" is-link ></mt-cell>   
             <hr>     
@@ -24,6 +23,7 @@
 
 <script>
 import userRequest from "../../../request/requests/system"
+import { MessageBox } from 'mint-ui';
 export default {
     data() {
         return {
@@ -33,6 +33,11 @@ export default {
     },
     mounted() {
         this.getUserList()
+    },
+    filters: {
+        roleType(value) {
+            return value=="admin"?"管理员":"普通用户";
+        }
     },
     methods: {
         goBack(){
@@ -57,6 +62,11 @@ export default {
             }else {
                 console.log(res)
             }
+        },
+        isDeleteUser(userId) {
+            MessageBox.confirm('确定删除该用户?').then(action => {
+                this.deleteUser(userId)
+            });
         },
         /**
          * @description 管理员删除普通用户

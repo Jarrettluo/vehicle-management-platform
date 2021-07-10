@@ -16,6 +16,7 @@
 		 </div>
 		 <div style="text-align: center;margin-top: 16rem;">
 			 <span style="color: #2C3E50;font-size: smaller;">成都樱桃智库技术有限公司提供服务</span>
+			 <div style="color: #2C3E50;font-size: smaller;"><a href="/">申请试用</a></div>
 		 </div>
 	</div>
 	
