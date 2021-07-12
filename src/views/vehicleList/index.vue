@@ -50,10 +50,13 @@ export default {
         this.getParams()
     },
     mounted() {
-        this.getVehicleListData()
+        this.getVehicleListData("unsale")
+        this.getVehicleListData("saled")
+    },
+    destroyed(){
+        sessionStorage.setItem("tabId", this.selected)
     },
     methods: {
-
         /**
          * 获取路由参数
          */
@@ -61,6 +64,8 @@ export default {
             var id = this.$route.query.id;
             if(id) {
                 this.selected = id;
+            }else{
+                this.selected = sessionStorage.getItem("tabId")
             }
         },
         /**
@@ -68,10 +73,14 @@ export default {
          * @author: 罗佳瑞
          * @since: 2021年1月19日
          */
-        async getVehicleListData(){
+        async getVehicleListData(sellState){
+            let param = {
+                companyId: sessionStorage.getItem("companyId"),
+                sellState: sellState
+            }
             await vehicleListPage.vehicleRequest('GET', {}, {}, "/list")
                 .then(res => {
-                    this.updateListData(res)
+                    this.updateListData(res, param)
                 })
                 .catch(err => {
                     Toast("获取失败，检查网络" + err)
@@ -83,7 +92,7 @@ export default {
          * @author: 罗佳瑞
          * @since: 2021年1月19日
          */
-        updateListData(res) {
+        updateListData(res, param) {
             if(res.code === 200) {
                 var data = res.data
                 data = data.reverse() // 列表反转
@@ -98,7 +107,6 @@ export default {
                 Toast("获取失败，检查网络:" + res.message)
             }
         },
-
         jump(vehicleId){
             this.$router.push({
                 path: '/vehicleRegister',

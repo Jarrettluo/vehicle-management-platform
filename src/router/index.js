@@ -93,13 +93,23 @@ const router = new Router({
             path: '/test',
             name: 'test',
             component: test,
+        },{
+            path: '/tryout/',
+            name: 'tryout',
+            component: ()=>import("../views/tryout/index.vue"),
         }
     ]
 })
 
 router.beforeEach((to, from, next) => {
+    if(from.name == "loginPage" && to.name == "tryout") {
+        next() // 直接进行跳转，不再执行钩子函数
+        return
+    }
     // 验证是否有token，如果在非登录页没有token，就跳转到登录页面
-    if (to.name !== 'loginPage' && !sessionStorage.getItem("token")) next({ name: 'loginPage' })
+    if (to.name !== 'loginPage' && !sessionStorage.getItem("token")) {
+        next({ name: 'loginPage' })
+    }
     // 每次跳转的时候进行验证账号是否过期，如果过期跳转到登录页面/充值页面
     else if (to.name !== 'loginPage' && sessionStorage.getItem("token")) {
         let expirationTime = sessionStorage.getItem("expirationTime")
@@ -116,7 +126,7 @@ router.beforeEach((to, from, next) => {
         }else {
             next()
         }
-    } 
+    }
     else next()
 })
 

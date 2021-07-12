@@ -16,7 +16,12 @@
 		 </div>
 		 <div style="text-align: center;margin-top: 16rem;">
 			 <span style="color: #2C3E50;font-size: smaller;">成都樱桃智库技术有限公司提供服务</span>
-			 <div style="color: #2C3E50;font-size: smaller;"><a href="/">申请试用</a></div>
+			 <!-- <div style="color: royalblue;font-size: smaller;" @click="routeGo()">申请试用</div>
+			  -->
+			  <router-link
+				to="/tryout/">
+				fdsfd
+			  </router-link>
 		 </div>
 	</div>
 	
@@ -108,7 +113,7 @@
 					});
 				}else if(res.code == 1203) {
 					Toast({
-						message: '登录失败,服务器错误',
+						message: '登录失败,' + res.message,
 						position: 'bottom',
 						duration: 5000
 					});
@@ -119,7 +124,14 @@
 						duration: 5000
 					});
 				}
-		  	}
+		  	},
+			routeGo(){
+				console.log("*****")
+				this.$router.push({
+					path: "/tryout"
+				}).catch(err => {})
+
+			}
 		}
 	  }
 </script>
