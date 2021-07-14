@@ -244,6 +244,7 @@ export default {
                 purchasePrice: null,
                 vehicleNote: null,
                 saleitemId: null,
+                companyId: sessionStorage.getItem("companyId")
             },
 
             saleItemData: {
@@ -258,6 +259,7 @@ export default {
                 saleDate: null,
                 vehicleId: null,
                 clearState: null,
+                companyId: sessionStorage.getItem("companyId")
             },
 
             vClearState: false, // 是否结账的布尔量
@@ -564,6 +566,7 @@ export default {
                     saleDate: null,
                     vehicleId: null,
                     clearState: false,
+                    companyId: sessionStorage.getItem("companyId")
                 }
             }
         },
@@ -772,6 +775,7 @@ export default {
                     saleDate: new Date(),
                     vehicleId: null,
                     clearState: false,
+                    companyId: sessionStorage.getItem("companyId")
                 }
             }
         },

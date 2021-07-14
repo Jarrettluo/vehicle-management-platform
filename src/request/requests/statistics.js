@@ -8,7 +8,7 @@ import {
 /**
  * 查询统计数据
  */
-function statisticsRequest() {
+function statisticsRequest(params) {
     return new Promise((resolve, reject) => {
         axios({
             url: STATISTICS_URL,
@@ -17,7 +17,7 @@ function statisticsRequest() {
                 'Content-Type': 'application/json',
                 'token': sessionStorage.getItem('token')
             },
-            params:{},
+            params:params,
             data:{},
         })
         .then((res) => {

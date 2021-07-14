@@ -117,6 +117,7 @@ export default {
                 purchasePrice: null,
                 vehicleNote: null,
                 saleitemId: null,
+                companyId: sessionStorage.getItem("companyId"),
             },
             partner: {
                 name: null,
@@ -141,8 +142,6 @@ export default {
 
             preparedVisible: false,
             partnerList:[],
-
-
         }
     },
     components: {

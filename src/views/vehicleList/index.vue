@@ -65,7 +65,8 @@ export default {
             if(id) {
                 this.selected = id;
             }else{
-                this.selected = sessionStorage.getItem("tabId")
+                let a = sessionStorage.getItem("tabId")
+                if(a) this.selected = a 
             }
         },
         /**
@@ -78,7 +79,9 @@ export default {
                 companyId: sessionStorage.getItem("companyId"),
                 sellState: sellState
             }
-            await vehicleListPage.vehicleRequest('GET', {}, {}, "/list")
+            console.log(param)
+            if(!param.companyId || !param.sellState) return
+            await vehicleListPage.vehicleRequest('GET', param, {}, "/list")
                 .then(res => {
                     this.updateListData(res, param)
                 })
@@ -95,7 +98,6 @@ export default {
         updateListData(res, param) {
             if(res.code === 200) {
                 var data = res.data
-                data = data.reverse() // 列表反转
                 for(var i=0, len=data.length; i< len; i++){
                     if(data[i].saleitemId != null){
                         this.soldVehicle.push(data[i])

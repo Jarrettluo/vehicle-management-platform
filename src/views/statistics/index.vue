@@ -78,7 +78,10 @@ export default {
          * @since: 2021年1月19日
          */
         async acquireStatistics(){
-            await StatisticsPageRequest.statisticsRequest()
+            let params = {
+                companyId: sessionStorage.getItem("companyId")
+            }
+            await StatisticsPageRequest.statisticsRequest(params)
                 .then(res => {
                     this.updateStatisticsDate(res)
                 })
