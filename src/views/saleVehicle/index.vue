@@ -18,6 +18,7 @@
                 <li v-for="(item, index) in searchList" :key="index" @click="linkTo(item.id)">
                     <span>{{ item.vehiclePlate }}</span> <br>
                     <span><small> {{ item.vehicleBrand }} </small></span>
+                    <span v-show="item.saleitemId != null" style="color:#ea4335;"> 已售</span>
                 </li>
             </ul>
         </div>
@@ -207,7 +208,7 @@
             </div>
         </div>
 
-        <vue-floating isNearBorder @tap="floatingTap" :rightMargin="0" :bottomMargin="20">
+        <vue-floating isNearBorder @tap="floatingTap" :rightMargin="0" :bottomMargin="10">
             <div class="floatingView"></div>
         </vue-floating>
         <div style="position: absolute; top:88px; z-index: 10;width:100%;padding:10px;" v-show="showCalc">
@@ -578,7 +579,8 @@ export default {
          * @since: 2021年1月19日
          */
         async searchVehicles(){
-            var params = {vehiclePlate: this.keyword.toString()}
+            var params = {vehiclePlate: this.keyword.toString(),
+            companyId: sessionStorage.getItem("companyId")}
             await searchPageRequest.searchRequest(params)
                 .then(res => {
                     this.updateVehicleList(res)
@@ -598,7 +600,18 @@ export default {
                 if(!res.data.length){
                     Toast("没有查询到相关车辆")
                 }
-                this.searchList = res.data
+                console.log(res)
+                var data = res.data
+                let soldVehicle = []
+                let unSoldVehicle = []
+                for(var i=0, len=data.length; i< len; i++){
+                    if(data[i].saleitemId != null){
+                        soldVehicle.push(data[i])
+                    }else {
+                        unSoldVehicle.push(data[i])
+                    }
+                }
+                this.searchList = unSoldVehicle.concat(soldVehicle);  // 再合并起来
             }else {
                 Toast("没有查询到相关车辆")
                 this.searchList = []
@@ -612,8 +625,15 @@ export default {
          */
         linkTo(id){
             this.vehicleId = id
-            this.getVehicleInfo(id)
             this.searchList = null
+            this.$router.push({
+                path: '/saleVehicle',
+                query: {
+                    vehicleId: this.vehicleId
+                }
+            })
+            this.getVehicleInfo(id)
+
         },
 
         /**

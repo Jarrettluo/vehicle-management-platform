@@ -16,11 +16,12 @@
 		 </div>
 		 <div style="text-align: center;margin-top: 16rem;">
 			 <span style="color: #2C3E50;font-size: smaller;">成都樱桃智库技术有限公司提供服务</span>
-			 <!-- <div style="color: royalblue;font-size: smaller;" @click="routeGo()">申请试用</div>
+			 <!-- <div style="color: royalblue;font-size: smaller;" @click="routeGo()"></div>
 			  -->
+			  <br>
 			  <router-link
 				to="/tryout/">
-				fdsfd
+				申请试用
 			  </router-link>
 		 </div>
 	</div>

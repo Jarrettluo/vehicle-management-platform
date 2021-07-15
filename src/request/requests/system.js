@@ -1,4 +1,5 @@
 import axios from 'axios'
+import qs from 'qs'
 
 import {
 	LOG_URL, USER_LIST_URL,
@@ -12,7 +13,8 @@ import {
 /**
  * 查询日志信息
  */
-function logRequest() {
+function logRequest(params) {
+    console.log(params)
     return new Promise((resolve, reject) => {
         axios({
             url: LOG_URL,
@@ -21,7 +23,10 @@ function logRequest() {
                 'Content-Type': 'application/json',
                 'token': sessionStorage.getItem('token')
             },
-            params:{},
+            paramsSerializer: params => {
+                return qs.stringify(params, { indices: false })
+              },
+            params: params,
             data:{},
         })
         .then((res) => {

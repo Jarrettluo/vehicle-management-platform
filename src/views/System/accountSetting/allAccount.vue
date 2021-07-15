@@ -14,7 +14,7 @@
             <mt-cell title="是否删除">
                 <mt-button type="danger" style="width:100%;" :disabled="account.type == 'admin' && account.id == adminUser.id " @click="isDeleteUser(account.id)"><span> 删  除 </span></mt-button>
             </mt-cell>   
-            <mt-cell title="活动日志" is-link ></mt-cell>   
+            <mt-cell title="活动日志" is-link :to="'/systemSetting/systemLog?username=' + account.username"></mt-cell>   
             <hr>     
         </div>
 

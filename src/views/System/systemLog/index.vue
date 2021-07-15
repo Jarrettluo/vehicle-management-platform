@@ -35,11 +35,13 @@
 // 导入时间插件momentjs
 import moment from 'moment'
 import systemPage from '../../../request/requests/system'
+import { Toast } from 'mint-ui';
 
 export default {
     data(){
         return {
-            operateLogList: []
+            operateLogList: [],
+            usernameList: [],
         }
     },
     // 定义时间格式全局过滤器
@@ -51,12 +53,24 @@ export default {
             return code == 200 ? "成功":"失败";
         }
     },
+    created(){
+        this.getParams()
+    },
     mounted(){
         this.acquireStatistics()
     },
     methods: {
         goBack(){
             this.$router.go(-1);
+        },
+        /**
+         * 获取路由参数
+         */
+        getParams () {  
+            var username = this.$route.query.username;
+            if(username) {
+                this.usernameList.push(username);
+            }
         },
 
         /**
@@ -65,7 +79,12 @@ export default {
          * @since: 2021年1月19日
          */
         async acquireStatistics(){
-            await systemPage.logRequest()
+            let params = {
+                userId: (this.usernameList) + "", // 转换为字符串
+                companyId: sessionStorage.getItem("companyId")
+            }
+            console.log(params)
+            await systemPage.logRequest(params)
                 .then(res => {
                     this.updateStatisticsDate(res)
                 })
