@@ -14,7 +14,6 @@ import {
  * 查询日志信息
  */
 function logRequest(params) {
-    console.log(params)
     return new Promise((resolve, reject) => {
         axios({
             url: LOG_URL,

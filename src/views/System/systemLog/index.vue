@@ -80,10 +80,9 @@ export default {
          */
         async acquireStatistics(){
             let params = {
-                userId: (this.usernameList) + "", // 转换为字符串
+                userId: (this.usernameList) + "", // z
                 companyId: sessionStorage.getItem("companyId")
             }
-            console.log(params)
             await systemPage.logRequest(params)
                 .then(res => {
                     this.updateStatisticsDate(res)

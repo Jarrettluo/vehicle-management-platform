@@ -47,6 +47,7 @@
 import copyrightPage from "../copyright/index.vue"
 import { formatDate } from "../../plugin/utils"
 import tryoutPage from ".././../request/requests/tryout"
+import { Toast } from 'mint-ui';
 
 export default {
 
@@ -165,7 +166,7 @@ export default {
                 username: this.username,
                 password: this.password,
                 validAccount: this.validAccount,
-                expirationTime: this.expirationTime
+                expirationTime: (this.expirationTime + " 00:00:00")
             }
             this.changePwd(param)
         },

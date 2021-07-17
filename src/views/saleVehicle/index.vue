@@ -600,7 +600,6 @@ export default {
                 if(!res.data.length){
                     Toast("没有查询到相关车辆")
                 }
-                console.log(res)
                 var data = res.data
                 let soldVehicle = []
                 let unSoldVehicle = []

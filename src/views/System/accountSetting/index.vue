@@ -16,9 +16,6 @@
 </template>
 
 <script>
-
-import { Cell } from 'mint-ui';
-
 export default {
 
     methods: {

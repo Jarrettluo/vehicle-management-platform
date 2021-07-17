@@ -7,7 +7,9 @@
             <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
         </mt-header>
         <div class="account-item" v-for="(account, index) in accountList" :key="index">
-            <mt-cell title="登录账号" :value=account.username></mt-cell>
+            <mt-cell title="登录账号">
+                <span v-show="account.id == adminUser.id" style="font-size:12px;color:#fff;border-radius:4px;background-color:yellowgreen;padding:4px;">当前账号</span> 
+                {{account.username}}</mt-cell>
             <mt-cell title="账号类型">
                 <mt-button @click="changeUserType(account)" :disabled="account.type == 'admin' && account.id == adminUser.id ">{{ account.type | roleType }}</mt-button>
             </mt-cell>
@@ -24,6 +26,8 @@
 <script>
 import userRequest from "../../../request/requests/system"
 import { MessageBox } from 'mint-ui';
+import { Toast } from 'mint-ui';
+
 export default {
     data() {
         return {
@@ -57,8 +61,14 @@ export default {
         // 更新用户列表
         updateUserList(res){
             if(res.code == 200) {
-                this.accountList = res.data
-                this.adminUser = this.accountList.filter(element => element.id == sessionStorage.getItem("userId"))[0]
+                let allData = res.data
+                this.adminUser = allData.filter(element => element.id == sessionStorage.getItem("userId"))[0]
+                if(this.adminUser.type != "admin") {
+                    Toast("您是普通账号，没有权限访问！")
+                    this.goBack(); // 跳转回去
+                }else {
+                    this.accountList = allData
+                }
             }else {
                 console.log(res)
             }
@@ -115,7 +125,6 @@ export default {
         // 更新修改结果
         updateChangeUser(res){
             if(res.code == 200 ){
-                console.log(res)
                 this.getUserList()
             }else {
                 console.log(res)

@@ -79,7 +79,6 @@ export default {
                 companyId: sessionStorage.getItem("companyId"),
                 sellState: sellState
             }
-            console.log(param)
             if(!param.companyId || !param.sellState) return
             await vehicleListPage.vehicleRequest('GET', param, {}, "/list")
                 .then(res => {
@@ -106,7 +105,12 @@ export default {
                     }
                 }
             }else {
-                Toast("获取失败，检查网络:" + res.message)
+                if(param.sellState == "unsale"){
+                    Toast("哦，还没有可销售的车辆！")
+                }else {
+                    Toast("喔唷，没有查到已经销售的车辆！")
+                }
+                
             }
         },
         jump(vehicleId){

@@ -73,7 +73,6 @@
 					})
 			},
 			updateLoginResult(res){
-				console.log(res)
 				if(res.code == 200){
 					sessionStorage.setItem("token", res.data.token);
 					sessionStorage.setItem("userId", res.data.userId);
@@ -127,7 +126,6 @@
 				}
 		  	},
 			routeGo(){
-				console.log("*****")
 				this.$router.push({
 					path: "/tryout"
 				}).catch(err => {})
