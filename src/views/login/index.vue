@@ -21,7 +21,7 @@
 			  <br>
 			  <router-link
 				to="/tryout/">
-				申请试用
+				<span style="color: royalblue;font-size:12px;">申请试用</span>
 			  </router-link>
 		 </div>
 	</div>

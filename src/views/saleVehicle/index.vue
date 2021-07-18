@@ -209,7 +209,7 @@
         </div>
 
         <vue-floating isNearBorder @tap="floatingTap" :rightMargin="0" :bottomMargin="10">
-            <div class="floatingView"></div>
+            <div class="floatingView"><i class="fa fa-calculator" aria-hidden="true"></i></div>
         </vue-floating>
         <div style="position: absolute; top:88px; z-index: 10;width:100%;padding:10px;" v-show="showCalc">
             <div class="content" style="padding: 10px;">
@@ -989,11 +989,17 @@ a:focus {
 }
 
 .floatingView{
-    background-image: url('http://yanxuan.nosdn.127.net/4cc272e9f9eddae1bfe4d057d2fe549a.png');
+    /* background-image: url('http://yanxuan.nosdn.127.net/4cc272e9f9eddae1bfe4d057d2fe549a.png'); */
     background-size: cover;
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
+    background-color: rgba(255, 0, 0, 0.8);
+    font-size: 21px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .content {

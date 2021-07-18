@@ -11,15 +11,17 @@
                 <span v-show="account.id == adminUser.id" style="font-size:12px;color:#fff;border-radius:4px;background-color:yellowgreen;padding:4px;">当前账号</span> 
                 {{account.username}}</mt-cell>
             <mt-cell title="账号类型">
-                <mt-button @click="changeUserType(account)" :disabled="account.type == 'admin' && account.id == adminUser.id ">{{ account.type | roleType }}</mt-button>
+                <mt-button @click="changeUserType(account)" :disabled="account.type == 'admin' && account.id == adminUser.id " size="small">
+                    <label style="margin-top:10px;">{{ account.type | roleType }}</label></mt-button>
             </mt-cell>
             <mt-cell title="是否删除">
-                <mt-button type="danger" style="width:100%;" :disabled="account.type == 'admin' && account.id == adminUser.id " @click="isDeleteUser(account.id)"><span> 删  除 </span></mt-button>
+                <mt-button type="danger" style="width:100%;" :disabled="account.type == 'admin' && account.id == adminUser.id " @click="isDeleteUser(account.id)" size="small">
+                    <label style="margin-top:10px;">删  除</label></mt-button>
             </mt-cell>   
             <mt-cell title="活动日志" is-link :to="'/systemSetting/systemLog?username=' + account.username"></mt-cell>   
             <hr>     
         </div>
-
+<!-- <span> 删  除 </span> -->
     </div>
 </template>
 

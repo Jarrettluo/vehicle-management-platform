@@ -112,9 +112,9 @@ export default {
     data() {
         return {
           imglist:[
-            {img: require('../../assets/1.png')},
+            // {img: require('../../assets/1.png')},
             {img: require('../../assets/2.png')},
-            {img: require('../../assets/3.png')}
+            // {img: require('../../assets/3.png')}
           ],
           conheight:{
                 height:''

@@ -9,7 +9,7 @@
 
         <div class="cell-group">
             <div class="cell-title">
-                <span>账号设置</span>
+                <span><i class="fa fa-user-circle-o" aria-hidden="true"></i> 账号设置</span>
             </div>
             <div class="cell-group-item">
                 <mt-cell 
@@ -29,7 +29,7 @@
                 </mt-cell>
             </div>
             <div class="cell-title">
-                <span>通用功能</span>
+                <span><i class="fa fa-tasks" aria-hidden="true"></i> 通用功能</span>
             </div>
             <div class="cell-group-item">
                 <mt-cell 
