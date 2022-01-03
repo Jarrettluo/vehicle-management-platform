@@ -24,6 +24,12 @@
                 <mt-field label="车身颜色" placeholder="请输入车身颜色" v-model="vehicleInfo.vehicleColor" :attr="{ maxlength: 10 }">
                 </mt-field>
             </div>
+            <div style="height: 300px; background-color: greenyellow;font-size: 1rem;">
+
+              sfsd
+              <AddVin></AddVin>
+            </div>
+
             <div class="page-part">
                 <mt-field label="购车时间" placeholder="选择购车时间" type="date" v-model="vehicleInfo.purchaseDate" >
                 </mt-field>
@@ -104,6 +110,8 @@ import vehiclePageRequest from '../../request/requests/vehicleInfo.js'
 import plus from 'vue-html5plus'
 import Partner from './addPartner'
 import Preparednesses from './addPreparedness'
+import AddVin from './addVin'
+
 export default {
     data() {
         return {
@@ -145,8 +153,9 @@ export default {
         }
     },
     components: {
-        Partner,
-        Preparednesses,
+      Partner,
+      Preparednesses,
+      AddVin
     },
     computed:{
     },
