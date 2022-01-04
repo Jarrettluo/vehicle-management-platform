@@ -24,12 +24,11 @@
                 <mt-field label="车身颜色" placeholder="请输入车身颜色" v-model="vehicleInfo.vehicleColor" :attr="{ maxlength: 10 }">
                 </mt-field>
             </div>
-            <div style="height: 300px; background-color: greenyellow;font-size: 1rem;">
-
-              sfsd
-              <AddVin></AddVin>
+            <div class="page-part">
+              <mt-field label="VIN" placeholder="18位编码" v-model="vinCode">
+                <img src="../../assets/识别车牌.png" @click="vinVisual=!vinVisual; masking=true;" height="24px" width="24px">
+              </mt-field>
             </div>
-
             <div class="page-part">
                 <mt-field label="购车时间" placeholder="选择购车时间" type="date" v-model="vehicleInfo.purchaseDate" >
                 </mt-field>
@@ -85,6 +84,16 @@
                 </mt-button>
             </div>
         </div>
+
+        <div v-show="masking" style="position: absolute; z-index: 1; top: 0px; left: 0px; background-color: #1b1e21;opacity:0.2;width: 100%; height: 100vh;">
+        </div>
+
+        <!-- 车辆的vin识别窗口 -->
+        <AddVin class="add-vin-panel"
+                v-if="vinVisual"
+                :vinCode="vinCode"
+                @close="vinVisual=!vinVisual; masking=false;"
+          ></AddVin>
         
         <mt-actionsheet
             :actions="actions1"
@@ -150,6 +159,9 @@ export default {
 
             preparedVisible: false,
             partnerList:[],
+            masking: false, // 遮罩的module
+            vinVisual: false, // vin识别是否弹出
+            vinCode: null, // 车辆的vin码
         }
     },
     components: {
@@ -669,6 +681,17 @@ a:focus {
     text-decoration: none;
 }
 
+.add-vin-panel {
+  position:absolute;
+  z-index: 2;
+  bottom:200px;
+  height: 300px;
+  width: 100%;
+  background-color: #fcfcfc;
+  font-size: 1rem;
+  padding: 10px;
+}
+
 
 .dialog-page {
     position: absolute;
@@ -704,5 +727,7 @@ a:focus {
            top: 60px;
        }
     }
+
+
 
 </style>

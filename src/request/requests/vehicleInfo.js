@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import {
-	VEHICLE_URL, PARTNER_URL, PREPAREDNESS_URL, RECORGNIZE_URL
+	VEHICLE_URL, PARTNER_URL, PREPAREDNESS_URL, RECORGNIZE_URL, RECORGNIZE_VIN_URL
 } from '../urls/vhicleInfo.js'
 
 
@@ -116,9 +116,37 @@ function recorgnizeRequest(FormData) {
     })
 }
 
+function recorgnizeVinRequest(FormData) {
+    return new Promise((resolve, reject) => {
+        axios({
+            url: RECORGNIZE_VIN_URL,
+            method: 'POST',
+            headers: {
+                'Content-Type': "multipart/form-data",
+                token: sessionStorage.getItem('token')
+            },
+            //这部分非常重要，否则formdata会被转格式
+            transformRequest: [function(){
+                return FormData;
+            }],
+            params: {},
+            data: FormData,
+        })
+            .then((res) => {
+                // 成功
+                resolve(res.data)
+            })
+            .catch((res) => {
+                // 失败
+                reject(res)
+            })
+    })
+}
+
 export default {
     vehicleRequest,
     partnerRequest,
     preparednessRequest,
-    recorgnizeRequest
+    recorgnizeRequest,
+    recorgnizeVinRequest
 }
