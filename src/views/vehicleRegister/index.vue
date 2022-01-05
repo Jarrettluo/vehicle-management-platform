@@ -161,7 +161,6 @@ export default {
     components: {
       Partner,
       Preparednesses,
-      AddVin
     },
     computed:{
     },
