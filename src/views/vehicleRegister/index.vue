@@ -23,11 +23,12 @@
                 </mt-field>
                 <mt-field label="车身颜色" placeholder="请输入车身颜色" v-model="vehicleInfo.vehicleColor" :attr="{ maxlength: 10 }">
                 </mt-field>
-            </div>
-            <div class="page-part">
-              <mt-field label="VIN" placeholder="18位编码" v-model="vinCode">
-                <img src="../../assets/识别车牌.png" @click="vinVisual=!vinVisual; masking=true;" height="24px" width="24px">
-              </mt-field>
+                <mt-field label="VIN" placeholder="18位编码" v-model="vinCode">
+                    <a href="javascript:;" class="vin-image-file file" >
+                        <input type="file" id="vin-image" accept="image/*" ref="imageInput" @change="afterRead">
+                        <img src="../../assets/识别车牌.png" height="24px" width="24px">
+                    </a>
+                </mt-field>
             </div>
             <div class="page-part">
                 <mt-field label="购车时间" placeholder="选择购车时间" type="date" v-model="vehicleInfo.purchaseDate" >
@@ -87,13 +88,6 @@
 
         <div v-show="masking" style="position: absolute; z-index: 1; top: 0px; left: 0px; background-color: #1b1e21;opacity:0.2;width: 100%; height: 100vh;">
         </div>
-
-        <!-- 车辆的vin识别窗口 -->
-        <AddVin class="add-vin-panel"
-                v-if="vinVisual"
-                :vinCode="vinCode"
-                @close="vinVisual=!vinVisual; masking=false;"
-          ></AddVin>
         
         <mt-actionsheet
             :actions="actions1"
@@ -119,7 +113,7 @@ import vehiclePageRequest from '../../request/requests/vehicleInfo.js'
 import plus from 'vue-html5plus'
 import Partner from './addPartner'
 import Preparednesses from './addPreparedness'
-import AddVin from './addVin'
+import {compressImage} from '../../utils/CompressImageUtils'
 
 export default {
     data() {
@@ -551,6 +545,70 @@ export default {
             }
         },
 
+      //读取完图片后
+      afterRead(event) {
+        let that = this;
+        let fileContent = null;
+        let file = event.target.files[0]
+        let reader = new FileReader();
+        reader.onloadend = function () {
+          fileContent = reader.result;
+          that._compressAndUploadFile({
+            content: fileContent,
+            file: file
+          })
+        };
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+      },
+
+
+      /**
+       * //压缩图片上传
+       * */
+      _compressAndUploadFile(file) {
+        compressImage(file.content).then(result => {
+          if (result.size > file.file.size){
+            //压缩后比原来更大，则将原图上传
+            this._uploadImage(file.file, file.file.name);
+          } else {
+            //压缩后比原来小，上传压缩后的
+            this._uploadImage(result, file.file.name)
+          }
+        })
+      },
+      /**
+       *
+       * @param file
+       * @param filename
+       * @returns {Promise<void>}
+       * @private
+       */
+      async _uploadImage(file, filename) {
+        Indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
+        let params = new FormData();
+        params.append("file", file, filename);
+        await vehiclePageRequest.recorgnizeVinRequest(params)
+            .then(res => {
+              Indicator.close();
+              if(res.data){
+                Toast("识别成功："  + res.data)
+                this.vinCode = res.data
+              }else {
+                Toast("识别失败：请重试！")
+              }
+
+            })
+            .catch(err => {
+              Toast("" + err)
+              Indicator.close();
+            })
+      },
+
         test(value){
             if(value == null) return false;
             value = value.replace(/[^\d.]/g, ''); // 清除"数字"和"."以外的字符
@@ -711,6 +769,18 @@ a:focus {
 
 }
 
+
+.vin-image-file {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+
+#vin-image {
+  width: 28px;
+  height: 28px;
+}
 
 @keyframes window-open
     {
