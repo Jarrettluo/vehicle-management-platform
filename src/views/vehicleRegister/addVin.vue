@@ -4,21 +4,20 @@
       <span>车辆VIN</span>
     </div>
     <div class="vin-info-group vin-item">
-      <div v-for="x in (18)" class="vin-info">
+      <div v-for="x in ('123456789987654321')" class="vin-info">
         <span>{{ x }}</span>
       </div>
     </div>
     <div class="recognize-button vin-item">
 
+      <a href="javascript:;" class="file" >
+        <input type="file" id="userAvatar" accept="image/*" ref="imageInput" @change="afterRead">
+        <img src="../../assets/识别车牌.png">
+      </a>
     </div>
-    {{vinCode}}
-    {{ userPhoto }}
-    <a href="javascript:;" class="file" >拍照自动识别
-      <input type="file" id="userAvatar" accept="image/*" ref="imageInput" @change="afterRead">
-    </a>
     <div style="margin-top: 10px;">
       <mt-button style="width: 100%" type="primary" @click="closePanel">
-        <label class="mint-button-text" style="margin-top:8px;">关闭</label>
+        <label class="mint-button-text" style="margin-top:8px;">确定</label>
       </mt-button>
     </div>
   </div>
@@ -133,10 +132,47 @@ export default {
 .vin-info span {
   height: 48px;
   background-color: #ccc;
-  padding: 10px 0px;
+  padding: 10px 3px;
   line-height: 48px;
   border-radius: 4px;
 }
 
+.file {
+  position: relative;
+  display: inline-block;
+  background: #f6f8fa;
+  border: 1px solid #f3f3f4;
+  border-radius: 4px;
+  padding: 10px 12px;
+  overflow: hidden;
+  color: #656b79;
+  text-decoration: none;
+  text-indent: 0;
+  line-height: 12px;
+  font-size: 12px;
+  margin-top: 2px;
+}
+.file input {
+  position: absolute;
+  font-size: 100px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+}
+.file:active {
+  background: #949596;
+  border-color: #949596;
+  color:#3d4049;
+  text-decoration: none;
+}
+
+#userAvatar {
+  height: 48px;
+}
+
+a {
+  padding: 0px;
+  border-radius: 24px;
+}
 
 </style>
