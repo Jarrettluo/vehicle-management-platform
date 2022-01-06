@@ -23,7 +23,7 @@
                 </mt-field>
                 <mt-field label="车身颜色" placeholder="请输入车身颜色" v-model="vehicleInfo.vehicleColor" :attr="{ maxlength: 10 }">
                 </mt-field>
-                <mt-field label="VIN" placeholder="18位编码" v-model="vinCode">
+                <mt-field label="VIN" placeholder="18位编码" v-model="vehicleInfo.vinCode">
                     <a href="javascript:;" class="vin-image-file file" >
                         <input type="file" id="vin-image" accept="image/*" ref="imageInput" @change="afterRead">
                         <img src="../../assets/识别车牌.png" height="24px" width="24px">
@@ -129,6 +129,7 @@ export default {
                 vehicleNote: null,
                 saleitemId: null,
                 companyId: sessionStorage.getItem("companyId"),
+                vinCode: null,
             },
             partner: {
                 name: null,
@@ -154,8 +155,6 @@ export default {
             preparedVisible: false,
             partnerList:[],
             masking: false, // 遮罩的module
-            vinVisual: false, // vin识别是否弹出
-            vinCode: null, // 车辆的vin码
         }
     },
     components: {
@@ -596,7 +595,7 @@ export default {
               Indicator.close();
               if(res.data){
                 Toast("识别成功："  + res.data)
-                this.vinCode = res.data
+                this.vehicleInfo.vinCode = res.data
               }else {
                 Toast("识别失败：请重试！")
               }
