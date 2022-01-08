@@ -23,7 +23,7 @@
                 </mt-field>
                 <mt-field label="车身颜色" placeholder="请输入车身颜色" v-model="vehicleInfo.vehicleColor" :attr="{ maxlength: 10 }">
                 </mt-field>
-                <mt-field label="VIN" placeholder="18位编码" v-model="vehicleInfo.vinCode">
+                <mt-field label="VIN" placeholder="17位车辆识别码" v-model="vehicleInfo.vinCode">
                     <a href="javascript:;" class="vin-image-file file" >
                         <input type="file" id="vin-image" accept="image/*" ref="imageInput" @change="afterRead">
                         <img src="../../assets/识别车牌.png" height="24px" width="24px">
@@ -86,7 +86,7 @@
             </div>
         </div>
 
-        <div v-show="masking" style="position: absolute; z-index: 1; top: 0px; left: 0px; background-color: #1b1e21;opacity:0.2;width: 100%; height: 100vh;">
+        <div v-show="partnerVisible || preparedVisible" style="position: absolute; z-index: 1; top: 0px; left: 0px; background-color: #1b1e21;opacity:0.2;width: 100%; height: 100vh;">
         </div>
         
         <mt-actionsheet
@@ -114,6 +114,7 @@ import plus from 'vue-html5plus'
 import Partner from './addPartner'
 import Preparednesses from './addPreparedness'
 import {compressImage} from '../../utils/CompressImageUtils'
+import moment from 'moment'
 
 export default {
     data() {
@@ -161,8 +162,6 @@ export default {
       Partner,
       Preparednesses,
     },
-    computed:{
-    },
     beforeCreate() {
         document.addEventListener('plusready',function() {
             let uuid= plus.device.uuid
@@ -171,6 +170,8 @@ export default {
     created() {
         this.getParams()
         this.judgeParams()
+        this.vehicleInfo.registrationDate = moment((new Date()).getTime()).format('YYYY-MM-DD')
+        this.vehicleInfo.purchaseDate = moment((new Date()).getTime()).format('YYYY-MM-DD')
     },
     mounted() {
         
@@ -466,36 +467,59 @@ export default {
          * 图片拍照识别上传
          * @author: 罗佳瑞
          */
-        uploadFile() {
-            var that = this;
-            var inputDOM = that.$refs.imageInput;
-            var file = inputDOM.files;
-            var formData = new FormData();
-            formData.append('file', file[0]);
-            this.uploadImage(formData)
-
+        uploadFile(event) {
+            let that = this;
+            let fileContent = null;
+            let file = event.target.files[0]
+            let reader = new FileReader();
+            reader.onloadend = function () {
+                fileContent = reader.result;
+                that._compressAndUploadFileCarType({
+                    content: fileContent,
+                    file: file
+                })
+            };
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        },
+        /**
+         * //压缩图片上传
+         * @author 罗佳瑞
+         * */
+        _compressAndUploadFileCarType(file) {
+            compressImage(file.content).then(result => {
+                if (result.size > file.file.size){
+                    //压缩后比原来更大，则将原图上传
+                    this.uploadImage(file.file, file.file.name);
+                } else {
+                    //压缩后比原来小，上传压缩后的
+                    this.uploadImage(result, file.file.name)
+                }
+            })
+        },
+        /**
+         * @author 罗佳瑞
+         * */
+        async uploadImage(file, filename) {
             Indicator.open({
-                text: '识别中...',
+                text: '加载中...',
                 spinnerType: 'fading-circle'
             });
-            setTimeout(()=>{
-                Indicator.close();
-            },15000)
-
-
-        },
-
-        async uploadImage(formData) {
-            await vehiclePageRequest.recorgnizeRequest(formData)
+            let params = new FormData();
+            params.append("file", file, filename);
+            await vehiclePageRequest.recorgnizeRequest(params)
                 .then(res => {
                     this.uploadImageResult(res)
                 })
                 .catch(err => {
+                    Indicator.close();
                     Toast("" + err)
                 })
         },
 
         uploadImageResult(res) {
+            Indicator.close();
             if(res.code==200) {
                 var recorgnizeResult = res.data
                 var rln = recorgnizeResult.licenseNumber
@@ -519,23 +543,11 @@ export default {
                 }
                 if(rvy!=null) {
                     var rvyFormat = rvy.substr(0,4)
-                    var strTime = rvyFormat + "-01-01"
-                    // new Date(Date.parse(strTime.replace(/-/g,  "/")));
-                    this.vehicleInfo.registrationDate = new Date();
-                    resultStr = resultStr + "年代可能是：" + rvyFormat + "年;\n"
+                    var estimatedDate = new Date(rvyFormat + "-01-01");
+                    this.vehicleInfo.registrationDate = moment(estimatedDate.getTime()).format("YYYY-MM-dd");
+                    resultStr = resultStr + "年代可能是：" + rvyFormat + "年; "
                 }
-
-                Indicator.close();
-
-                Indicator.open({
-                    text: "识别成功\n" + resultStr,
-                    spinnerType: 'fading-circle'
-                });
-                setTimeout(()=>{
-                    Indicator.close();
-                },7500)
-
-
+                Toast("识别成功\\n" + resultStr);
             }else{
                 Toast({
                     message: "连接超时！"
@@ -543,8 +555,10 @@ export default {
             }
         },
 
-      //读取完图片后
-      afterRead(event) {
+        /**
+         * 读取完图片后调用此方法
+         * */
+        afterRead(event) {
         let that = this;
         let fileContent = null;
         let file = event.target.files[0]
@@ -560,10 +574,9 @@ export default {
           reader.readAsDataURL(file);
         }
       },
-
-
       /**
        * //压缩图片上传
+       * @author 罗佳瑞
        * */
       _compressAndUploadFile(file) {
         compressImage(file.content).then(result => {
@@ -577,7 +590,7 @@ export default {
         })
       },
       /**
-       *
+       * 上传车辆的识别码认证
        * @param file
        * @param filename
        * @returns {Promise<void>}
@@ -597,7 +610,7 @@ export default {
                 Toast("识别成功："  + res.data)
                 this.vehicleInfo.vinCode = res.data
               }else {
-                Toast("识别失败：请重试！")
+                Toast("识别失败，请重试！")
               }
 
             })
@@ -735,6 +748,10 @@ a:focus {
     border-color: #949596;
     color:#3d4049;
     text-decoration: none;
+}
+
+.mint-cell-value input {
+    text-align: left;
 }
 
 .add-vin-panel {

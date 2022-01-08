@@ -59,6 +59,7 @@
 <script>
 import preparedPageRequest from '../../request/requests/vehicleInfo.js'
 import { Toast, Indicator } from 'mint-ui';
+import moment from "moment";
 
 export default {
     data() {
@@ -69,7 +70,7 @@ export default {
                 repairItem: null,
                 repairPrice: null,
                 handlerName: null,
-                handlerDate: null,
+                handleDate: null,
                 id: null,
             }],
             choosedIndex: null,
@@ -99,6 +100,7 @@ export default {
     props: ["partners"],
     created() {
         this.getParams()
+        this.preparednesses[0].handleDate = moment((new Date()).getTime()).format('YYYY-MM-DD')
     },
     mounted() {
         this.judgeParams()
@@ -140,7 +142,7 @@ export default {
                         repairItem: null,
                         repairPrice: null,
                         handlerName: null,
-                        handleDate: null
+                        handleDate: moment((new Date()).getTime()).format('YYYY-MM-DD')
                     }
                 )
             }
