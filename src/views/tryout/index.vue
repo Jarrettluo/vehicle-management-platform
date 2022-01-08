@@ -1,8 +1,7 @@
 <template>
     <div>
         <copyrightPage/>
-        <br>
-        <br>
+        <div style="position:absolute; left: 0px; top: 620px; width: 100%;text-align: center;color: #cacaca"><i class="fa fa-angle-double-down" style="font-size: 4rem;"></i></div>
         <br>
         <br>
         <div class="title">
@@ -48,6 +47,7 @@ import copyrightPage from "../copyright/index.vue"
 import { formatDate } from "../../plugin/utils"
 import tryoutPage from ".././../request/requests/tryout"
 import { Toast } from 'mint-ui';
+import "../../assets/css/font-awesome.css"
 
 export default {
 
