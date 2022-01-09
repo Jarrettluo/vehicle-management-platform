@@ -74,6 +74,10 @@ const router = new Router({
             name: 'accountSetting',
             component: ()=>import("../views/System/accountSetting/changePassword.vue"),
         },{
+            path: '/systemSetting/preparatoryItem',
+            name: 'preparatoryItem',
+            component: ()=>import("../views/System/systemLog/preparatoryItem.vue"),
+        },{
             path: '/systemSetting/systemLog',
             name: 'systemLog',
             component: ()=>import("../views/System/systemLog/index.vue"),
