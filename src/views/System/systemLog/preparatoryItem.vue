@@ -17,20 +17,52 @@
 <!--                }-->
 <!--              ]"></mt-cell-swipe>-->
 
-        <div class="log-group">
-                    <mt-cell-swipe
-                        icon="sucess"
 
-                            :title= operateLog.type
-                            :right="[
-                    {
-                      content: '删除',
-                      style: { background: 'red', color: '#fff' },
-                      handler: () => this.$messagebox('删除')
-                    }
-                  ]"
-                            v-for="(operateLog, index) in operateLogList" :key="index"
-                    ></mt-cell-swipe>
+        <div class="log-group">
+            <div class="mintui" style="font-weight:300; line-height:48px; background-color: #f1f3f4; padding: 0 10px;"><span>默认项目</span></div>
+<!--            <mt-cell-swipe-->
+<!--                icon="sucess"-->
+<!--                :title= operateLog.name-->
+<!--                :right="[-->
+<!--                        {-->
+<!--                          content: '删除',-->
+<!--                          style: { background: 'red', color: '#fff' },-->
+<!--                          handler: () => this.$messagebox('删除')-->
+<!--                        }-->
+<!--                        ]"-->
+<!--                v-for="(operateLog, index) in operateLogList" :key="index"-->
+<!--            ></mt-cell-swipe>-->
+            <mt-cell v-for="(operateLog, index) in operateLogList"
+                     :key="index"
+                        :title="operateLog.name">
+            </mt-cell>
+        </div>
+
+        <div class="log-group">
+            <div class="mintui" style="font-weight:100; line-height: 48px;background-color: #f1f3f4;padding: 0 10px;">
+                <span>自建项目(左滑可删除)</span>
+            </div>
+
+            <mt-cell-swipe
+                icon="sucess"
+                :title= operateLog.name
+                :right="[
+                        {
+                          content: '删除',
+                          style: { background: 'red', color: '#fff' },
+                          handler: () => this.$messagebox('删除')
+                        }
+                        ]"
+                v-for="(operateLog, index) in operateLogList" :key="index"
+            ></mt-cell-swipe>
+            <div style="padding: 8px 10px;width: 100%;">
+<!--                <div class="mintui" style="border: 1px solid #cacaca;border-radius: 4px;line-height: 48px;text-align: center">-->
+<!--                    <span>添加项目</span>-->
+<!--                </div>-->
+                <mt-button type="primary" plain style="width: 100%;" @click="addNewItem">
+                    <i class="fa fa-angle-double-down" style="font-size: 28px;"></i>
+                </mt-button>
+                </div>
         </div>
 
 <!--                <div class="log-item">-->
@@ -58,9 +90,10 @@
 <script>
 // 导入时间插件momentjs
 import moment from 'moment'
-import systemPage from '../../../request/requests/system'
+import preparatoryItemRequest from '../../../request/requests/system'
 import { Toast } from 'mint-ui';
-import { CellSwipe } from 'mint-ui';
+import { MessageBox } from 'mint-ui';
+
 
 export default {
     data(){
@@ -105,10 +138,9 @@ export default {
          */
         async acquireStatistics(){
             let params = {
-                userId: (this.usernameList) + "", // z
                 companyId: sessionStorage.getItem("companyId")
             }
-            await systemPage.logRequest(params)
+            await preparatoryItemRequest.allPreparatoryItem(params)
                 .then(res => {
                     this.updateStatisticsDate(res)
                 })
@@ -124,12 +156,33 @@ export default {
          */
         updateStatisticsDate(res) {
             if (res.code === 200) {
-                this.operateLogList = res.data.reverse(); // 翻转列表
+                res.data = [{
+                    name: "洗车",
+                    type: "default",
+                },{
+                    name: "洗车",
+                    type: "default",
+                },{
+                    name: "洗车",
+                    type: "default",
+                },{
+                    name: "洗车",
+                    type: "default",
+                }]
+                this.operateLogList = res.data; // 翻转列表
             } else {
                 Toast("获取失败，检查网络")
             }
         },
 
+        /**
+         * 添加新项目
+         */
+        addNewItem(){
+            MessageBox.prompt('Please tell me your name').then(({ value, action }) => {
+                console.log(value)
+            });
+        }
 
     }
 }

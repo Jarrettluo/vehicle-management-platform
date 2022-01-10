@@ -6,6 +6,12 @@ import {
     CHANGE_USER_PWD_URL,
     CHANGE_USER_TYPE_URL,
     DELETE_USER_URL,
+
+    PREPARATORY_ADD_URL,
+    PREPARATORY_REMOVE_URL,
+    PREPARATORY_UPDATE_URL,
+    PREPARATORY_LIST_URL,
+
     COMPANY_URL,
 } from '../urls/system'
 
@@ -146,6 +152,119 @@ function changePwdRequest(data) {
         })
     })
 }
+
+/**
+ * 增加自定义项目
+ * @param params
+ * @returns {Promise<unknown>}
+ */
+function addPreparatoryItem(data) {
+    return new Promise((resolve, reject) => {
+        axios({
+            url: PREPARATORY_ADD_URL,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': sessionStorage.getItem('token')
+            },
+            params: {},
+            data: data,
+        })
+            .then((res) => {
+                // 成功
+                resolve(res.data)
+            })
+            .catch((res) => {
+                // 失败
+                reject(res)
+            })
+    })
+}
+
+/**
+ * 删除自定义的整备项目
+ * @param params
+ * @returns {Promise<unknown>}
+ */
+function removePreparatoryItem(params) {
+    return new Promise((resolve, reject) => {
+        axios({
+            url: PREPARATORY_REMOVE_URL,
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': sessionStorage.getItem('token')
+            },
+            params: params,
+            data:{},
+        })
+            .then((res) => {
+                // 成功
+                resolve(res.data)
+            })
+            .catch((res) => {
+                // 失败
+                reject(res)
+            })
+    })
+}
+
+/**
+ * 更新用户自定义的整备项目内容
+ * @param params
+ * @returns {Promise<unknown>}
+ */
+function updatePreparatoryItem(data) {
+    return new Promise((resolve, reject) => {
+        axios({
+            url: PREPARATORY_UPDATE_URL,
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': sessionStorage.getItem('token')
+            },
+            params: {},
+            data: data,
+        })
+            .then((res) => {
+                // 成功
+                resolve(res.data)
+            })
+            .catch((res) => {
+                // 失败
+                reject(res)
+            })
+    })
+}
+
+/**
+ * 查询全部的整备项目列表
+ * @param params
+ * @returns {Promise<unknown>}
+ */
+function allPreparatoryItem(params) {
+    return new Promise((resolve, reject) => {
+        axios({
+            url: PREPARATORY_LIST_URL,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': sessionStorage.getItem('token')
+            },
+            params: params,
+            data:{},
+        })
+            .then((res) => {
+                // 成功
+                resolve(res.data)
+            })
+            .catch((res) => {
+                // 失败
+                reject(res)
+            })
+    })
+}
+
 /**
  * @description 查找公司信息
  * @param { Object } params {companyId: Long} 
@@ -181,6 +300,11 @@ export default {
     changePwdRequest,
     changeTypeRequest,
     deleteUserRequest,
+
+    addPreparatoryItem,
+    removePreparatoryItem,
+    updatePreparatoryItem,
+    allPreparatoryItem,
 
     findCompanyRequest,
 }
