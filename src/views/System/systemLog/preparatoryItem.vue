@@ -1,89 +1,47 @@
 <template>
     <div>
-        <mt-header title="整备项目">
+        <mt-header title="整备项目" style="position: absolute; left: 0px; top: 0px;width: 100%; z-index: 1;">
             <a href="javascript:;" @click="goBack" class="goback" slot="left">
                 <i class="mintui mintui-back"></i>
                 返回</a>
             <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
         </mt-header>
-
-<!--        <mt-cell-swipe-->
-<!--            title="text"-->
-<!--            :right="[-->
-<!--                {-->
-<!--                  content: '删除',-->
-<!--                  style: { background: 'red', color: '#fff' },-->
-<!--                  handler: () => this.$messagebox('删除')-->
-<!--                }-->
-<!--              ]"></mt-cell-swipe>-->
-
-
+        <div style="position: absolute; top: 40px; width:100%; height: 100vh;">
         <div class="log-group">
             <div class="mintui" style="font-weight:300; line-height:48px; background-color: #f1f3f4; padding: 0 10px;"><span>默认项目</span></div>
-<!--            <mt-cell-swipe-->
-<!--                icon="sucess"-->
-<!--                :title= operateLog.name-->
-<!--                :right="[-->
-<!--                        {-->
-<!--                          content: '删除',-->
-<!--                          style: { background: 'red', color: '#fff' },-->
-<!--                          handler: () => this.$messagebox('删除')-->
-<!--                        }-->
-<!--                        ]"-->
-<!--                v-for="(operateLog, index) in operateLogList" :key="index"-->
-<!--            ></mt-cell-swipe>-->
-            <mt-cell v-for="(operateLog, index) in operateLogList"
+            <mt-cell v-for="(item, index) in defaultItemList"
                      :key="index"
-                        :title="operateLog.name">
+                     :title="item.name">
             </mt-cell>
         </div>
 
         <div class="log-group">
-            <div class="mintui" style="font-weight:100; line-height: 48px;background-color: #f1f3f4;padding: 0 10px;">
-                <span>自建项目(左滑可删除)</span>
+            <div class="mintui"
+                 v-show="userItemList.length"
+                 style="font-weight:100; line-height: 48px;background-color: #f1f3f4;padding: 0 10px;">
+                <span>自定义项目(左滑可删除)</span>
             </div>
 
             <mt-cell-swipe
                 icon="sucess"
-                :title= operateLog.name
+                :title= item.name
                 :right="[
                         {
                           content: '删除',
                           style: { background: 'red', color: '#fff' },
-                          handler: () => this.$messagebox('删除')
+                          handler: () => removeItem(item)
                         }
                         ]"
-                v-for="(operateLog, index) in operateLogList" :key="index"
+                v-for="(item, index) in userItemList" :key="index"
             ></mt-cell-swipe>
             <div style="padding: 8px 10px;width: 100%;">
-<!--                <div class="mintui" style="border: 1px solid #cacaca;border-radius: 4px;line-height: 48px;text-align: center">-->
-<!--                    <span>添加项目</span>-->
-<!--                </div>-->
                 <mt-button type="primary" plain style="width: 100%;" @click="addNewItem">
-                    <i class="fa fa-angle-double-down" style="font-size: 28px;"></i>
+<!--                    <i class="fa fa-angle-double-down" style="font-size: 28px;"></i>-->
+                    添加自定义项目
                 </mt-button>
                 </div>
+            </div>
         </div>
-
-<!--                <div class="log-item">-->
-<!--                    <div class="log-title">-->
-<!--                        <span class="log-user ">-->
-<!--                            {{ operateLog.userCode}}-->
-<!--                        </span>-->
-<!--                        <span class="log-time">-->
-<!--                            {{operateLog.operationTime | dateFormat}}-->
-<!--                        </span>-->
-<!--                    </div>-->
-<!--                    <div class="log-msg">-->
-<!--                        <span class="log-type">{{ operateLog.type }}</span>-->
-<!--                        <span class="log-model">{{ operateLog.model }}</span>-->
-<!--                        <span class="log-status" :class="[operateLog.result == 200 ?'log-status-success':'log-status-failed']">-->
-<!--                            {{operateLog.result | state}}</span>-->
-<!--                        <span class="log-ip">{{ operateLog.ip }}</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </li>-->
-<!--        </div>-->
     </div>
 </template>
 
@@ -100,6 +58,9 @@ export default {
         return {
             operateLogList: [],
             usernameList: [],
+
+            defaultItemList: [], // 默认的整备项目
+            userItemList: [], //
         }
     },
     // 定义时间格式全局过滤器
@@ -155,20 +116,16 @@ export default {
          * @since: 2021年1月19日
          */
         updateStatisticsDate(res) {
+            this.defaultItemList = []
+            this.userItemList = []
             if (res.code === 200) {
-                res.data = [{
-                    name: "洗车",
-                    type: "default",
-                },{
-                    name: "洗车",
-                    type: "default",
-                },{
-                    name: "洗车",
-                    type: "default",
-                },{
-                    name: "洗车",
-                    type: "default",
-                }]
+                res.data.forEach(item => {
+                    if(item.type == "default") {
+                        this.defaultItemList.push(item)
+                    }else {
+                        this.userItemList.push(item)
+                    }
+                })
                 this.operateLogList = res.data; // 翻转列表
             } else {
                 Toast("获取失败，检查网络")
@@ -179,9 +136,40 @@ export default {
          * 添加新项目
          */
         addNewItem(){
-            MessageBox.prompt('Please tell me your name').then(({ value, action }) => {
+            var that = this
+            MessageBox
+                .prompt('请输入自定义项目')
+                .then(({ value, action }) => {
                 console.log(value)
+                    that.addPreparatory(value)
             });
+        },
+        /**
+         * 添加整备项目
+         * @author 罗佳瑞
+         * */
+        async addPreparatory(value){
+            let params = {
+                name: value,
+                companyId: parseInt(sessionStorage.getItem("companyId")),
+                type: 'user'
+            }
+            if(value == null) return;
+            await preparatoryItemRequest.addPreparatoryItem(params)
+                .then(res => {
+                    this.acquireStatistics()
+                })
+                .catch(err => {
+                    Toast("获取失败，检查网络")
+                })
+        },
+
+        /**
+         *
+         * @param item
+         */
+        removeItem(item) {
+            console.log(item)
         }
 
     }
@@ -189,6 +177,9 @@ export default {
 </script>
 
 <style scoped>
+/deep/.mint-header-title {
+    margin-bottom: 0;
+}
 
 
 a,
@@ -265,6 +256,10 @@ li a {
 li a:hover {
     font-size: 30px;
     background: #f6f6f6;
+}
+
+/deep/.mint-button-text {
+    margin-bottom: 0px !important;
 }
 
 </style>
