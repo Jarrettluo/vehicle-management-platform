@@ -157,7 +157,12 @@ export default {
             if(value == null) return;
             await preparatoryItemRequest.addPreparatoryItem(params)
                 .then(res => {
-                    this.acquireStatistics()
+                    if(res.code === 200){
+                        this.acquireStatistics()
+                    }else {
+                        Toast(res.message)
+                    }
+
                 })
                 .catch(err => {
                     Toast("获取失败，检查网络")
@@ -168,8 +173,16 @@ export default {
          *
          * @param item
          */
-        removeItem(item) {
-            console.log(item)
+        async removeItem(item) {
+            await preparatoryItemRequest.removePreparatoryItem({
+                itemId: item.id
+            })
+                .then(res => {
+                    this.acquireStatistics()
+                })
+                .catch(err => {
+                    Toast("删除失败，请重试！")
+                })
         }
 
     }
