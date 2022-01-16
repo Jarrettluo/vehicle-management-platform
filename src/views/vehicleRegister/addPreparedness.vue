@@ -262,6 +262,11 @@ export default {
         getpopupVisible(index) {
             this.popupVisible = true
             this.choosedIndex = index // 弹出的索引赋值
+            // 取到当前序列的整备所属人，如果所属人是空的，则进行直接赋值
+            let currentName = this.preparednesses[this.choosedIndex].handlerName
+            if(currentName === null){
+                this.preparednesses[this.choosedIndex].handlerName = this.$refs.picker.getValues()[0].name
+            }
         },
         /**
          * @description 为各种数据进行赋值
