@@ -197,7 +197,7 @@ export default {
                 })
             }else {
                 Toast({
-                    message: '添加成功：' + res.message,
+                    message: '创建失败，' + res.message,
                     position: 'bottom',
                     duration: 2000
                 });
