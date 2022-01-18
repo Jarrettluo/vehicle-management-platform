@@ -8,16 +8,12 @@
                 <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
             </mt-header>
         </div>
-        <div class="vehicle-item-group" >
-            <VehicleItem></VehicleItem>
-            <VehicleItem></VehicleItem>
-            <VehicleItem></VehicleItem>
-            <VehicleItem></VehicleItem>
-
+        <div class="vehicle-item-group" v-for="vehicle in vehicleMonth" :key="vehicle.id">
+            <VehicleItem :vehicle-info="vehicle"></VehicleItem>
         </div>
-        <div>
-            下载
-        </div>
+<!--        <div>-->
+<!--            下载-->
+<!--        </div>-->
     </div>
 </template>
 
@@ -28,7 +24,35 @@ export default {
     name: "monthDetail.vue",
     data(){
         return {
-
+            vehicleMonth: [{
+                id: 1,
+                plate: "川A99098",
+                model: "宝马312",
+                income: 378700,
+                outcome: 360000,
+                profit: 8933.3,
+            },{
+                id: 2,
+                plate: "川A525LC",
+                model: "宝马525",
+                income: 378700,
+                outcome: 360000,
+                profit: 9233,
+            },{
+                id: 3,
+                plate: "川A94344",
+                model: "长城H8",
+                income: 378700,
+                outcome: 360000,
+                profit: 10003.1,
+            },{
+                id: 4,
+                plate: "川A8K893",
+                model: "奔驰GLC",
+                income: 378700,
+                outcome: 360000,
+                profit: 12933,
+            }]
         }
     },
     components: {

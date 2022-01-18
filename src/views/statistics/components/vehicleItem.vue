@@ -2,24 +2,26 @@
     <div class="vehicle-item">
         <div class="item" >
             <div class="vehicle-plate">
-                川A88099
+                {{vehicleInfo.plate}}
             </div>
             <div class="vehicle-model" >
-                宝马325
+                {{vehicleInfo.model}}
             </div>
         </div>
         <div class="item center-item">
             <div class="item-info" >
-                <span class="tag income-tag">支</span> 21,000
+                <span class="tag income-tag">支</span>
+                {{vehicleInfo.outcome}}
             </div>
             <div class="item-info">
-                <span class="tag outcome-tag" >收</span> 24,093
+                <span class="tag outcome-tag" >收</span>
+                {{vehicleInfo.income}}
             </div>
         </div>
         <div class="item center-item" >
             <div style="width: calc(100% - 20px); float: left">
                 <div class="title item-info" style="color: red;">
-                    12,000
+                    {{vehicleInfo.profit}}
                 </div>
                 <div class="title item-info" style="color: green">
                     -10.34%
@@ -34,7 +36,8 @@
 
 <script>
 export default {
-    name: "vehicleItem"
+    name: "vehicleItem",
+    props: ["vehicleInfo"]
 }
 </script>
 
