@@ -90,6 +90,10 @@ const router = new Router({
             name: 'statistics',
             component: statistics
         },{
+            path: '/statistics/month',
+            name: 'month',
+            component: ()=>import("../views/statistics/monthDetail.vue"),
+        },{
             path: '/copyright',
             name: 'copyright',
             component: copyrightPage,

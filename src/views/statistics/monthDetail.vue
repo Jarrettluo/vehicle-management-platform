@@ -8,7 +8,11 @@
                 <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
             </mt-header>
         </div>
-        <div>
+        <div class="vehicle-item-group" >
+            <VehicleItem></VehicleItem>
+            <VehicleItem></VehicleItem>
+            <VehicleItem></VehicleItem>
+            <VehicleItem></VehicleItem>
 
         </div>
         <div>
@@ -18,11 +22,25 @@
 </template>
 
 <script>
+import "../../assets/css/font-awesome.css"
+import VehicleItem from "./components/vehicleItem"
 export default {
-    name: "monthDetail.vue"
+    name: "monthDetail.vue",
+    data(){
+        return {
+
+        }
+    },
+    components: {
+        VehicleItem
+    }
 }
 </script>
 
 <style scoped>
+.vehicle-item-group {
+
+}
+
 
 </style>
