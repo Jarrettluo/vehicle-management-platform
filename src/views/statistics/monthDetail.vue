@@ -8,6 +8,38 @@
                 <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
             </mt-header>
         </div>
+        <div style="margin: 6px 0; display: flex;text-align: center;flex-wrap: wrap; justify-content: space-between;padding: 6px 0px;">
+            <div style="width: 25%; border-right: 1px solid #eaeaea;font-size: 0.6rem;">
+                <div>⬅️</div>
+                <div>上一月</div>
+            </div>
+            <div style="line-height: 36px;font-size: 1.1rem; color: #3d4049;">
+                2022年1月
+            </div>
+            <div style="width: 25%; border-left: 1px solid #eaeaea; font-size: 0.6rem;">
+                <div>👉</div>
+                <div>下一月</div>
+            </div>
+        </div>
+
+        <div style="display: flex;flex-wrap: wrap; justify-content: space-between;text-align: center; font-size: 1rem;height: 36px;border-bottom: 2px solid #fff;line-height: 36px;">
+            <div style="width: 25%;background-color: lightcoral;color: white;font-weight: bold;">本月总购车</div>
+            <div style="width: 25%;text-align: left;padding: 0 4px; color: lightcoral;">125辆</div>
+            <div style="width: 25%;background-color: yellowgreen;color: white;font-weight: bold;">本月总售车</div>
+            <div style="width: 25%;text-align: left;padding: 0 4px;color: #1c7430;">125辆</div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; text-align: center; font-size: 1rem;height: 36px;line-height: 36px;">
+            <div style="width: 25%;background-color: lightcoral;color: white;font-weight: bold;">本月总支出</div>
+            <div style="width: 25%;text-align: left;padding: 0 4px; color: lightcoral;">1,200,000</div>
+            <div style="width: 25%;background-color: yellowgreen;color: white;font-weight: bold;">本月总收入</div>
+            <div style="width: 25%;text-align: left;padding: 0 4px; color: #1c7430;">1,234,898</div>
+        </div>
+        <div>
+
+        </div>
+        <div style="padding: 10px 0px 0px 0px;">
+            排序
+        </div>
         <div class="vehicle-item-group" v-for="vehicle in vehicleMonth" :key="vehicle.id">
             <VehicleItem :vehicle-info="vehicle"></VehicleItem>
         </div>

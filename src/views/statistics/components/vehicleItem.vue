@@ -19,12 +19,12 @@
             </div>
         </div>
         <div class="item center-item" >
-            <div style="width: calc(100% - 20px); float: left">
-                <div class="title item-info" style="color: red;">
+            <div style="width: calc(100% - 20px); float: left;" :class="vehicleInfo.profit > 0 ? 'pasitive-value' : 'negitive-value'">
+                <div class="title item-info" >
                     {{vehicleInfo.profit}}
                 </div>
-                <div class="title item-info" style="color: green">
-                    -10.34%
+                <div class="title item-info">
+                    {{ vehicleInfo | profitPercent }}%
                 </div>
             </div>
             <div class="expand-button">
@@ -37,7 +37,19 @@
 <script>
 export default {
     name: "vehicleItem",
-    props: ["vehicleInfo"]
+    props: ["vehicleInfo"],
+    data() {
+        return {
+
+        }
+    },
+    filters: {
+        profitPercent(vehicleInfo){
+            return (vehicleInfo.profit/vehicleInfo.outcome).toFixed(2);
+        }
+    }
+
+
 }
 </script>
 
@@ -99,5 +111,13 @@ export default {
     line-height: 40px;
     text-align: center;
     color: #999999;
+}
+
+.pasitive-value {
+    color: red;
+}
+
+.negitive-value {
+    color: green;
 }
 </style>
