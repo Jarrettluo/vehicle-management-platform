@@ -32,11 +32,11 @@
                 <span><i class="fa fa-tasks" aria-hidden="true"></i> 通用功能</span>
             </div>
             <div class="cell-group-item">
-<!--                <mt-cell-->
-<!--                    title="整备项目"-->
-<!--                    to="/systemSetting/preparatoryItem"-->
-<!--                    is-link>-->
-<!--                </mt-cell>-->
+                <mt-cell
+                    title="整备项目"
+                    to="/systemSetting/preparatoryItem"
+                    is-link>
+                </mt-cell>
                 <mt-cell 
                 title="公司信息" 
                 to="/systemSetting/companyInfo"

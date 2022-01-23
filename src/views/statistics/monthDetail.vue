@@ -10,14 +10,14 @@
         </div>
         <div style="margin: 6px 0; display: flex;text-align: center;flex-wrap: wrap; justify-content: space-between;padding: 6px 0px;">
             <div style="width: 25%; border-right: 1px solid #eaeaea;font-size: 0.6rem;">
-                <div>⬅️</div>
+                <div><i class="fa fa-chevron-left"></i></div>
                 <div>上一月</div>
             </div>
             <div style="line-height: 36px;font-size: 1.1rem; color: #3d4049;">
                 2022年1月
             </div>
             <div style="width: 25%; border-left: 1px solid #eaeaea; font-size: 0.6rem;">
-                <div>👉</div>
+                <div><i class="fa fa-chevron-right"></i></div>
                 <div>下一月</div>
             </div>
         </div>
@@ -38,11 +38,23 @@
 
         </div>
         <div style="padding: 10px 0px 0px 0px;">
-            排序
+            售出车辆详情
         </div>
+        <div style="height: 16px;">车辆信息 <i class="fa fa-sort" ></i></div>
+        <div>车辆利润 <i class="fa fa-sort" ></i></div>
         <div class="vehicle-item-group" v-for="vehicle in vehicleMonth" :key="vehicle.id">
             <VehicleItem :vehicle-info="vehicle"></VehicleItem>
         </div>
+
+        <div style="padding: 10px 0px 0px 0px;">
+            购入车辆详情
+        </div>
+        <div style="height: 16px;">车辆信息 <i class="fa fa-sort" ></i></div>
+        <div>车辆利润 <i class="fa fa-sort" ></i></div>
+        <div class="vehicle-item-group" v-for="vehicle in vehicleMonth" :key="vehicle.id">
+            <VehicleItem :vehicle-info="vehicle"></VehicleItem>
+        </div>
+
 <!--        <div>-->
 <!--            下载-->
 <!--        </div>-->

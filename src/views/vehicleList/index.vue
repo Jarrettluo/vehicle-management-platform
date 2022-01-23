@@ -21,13 +21,15 @@
                 <section class="page-route-list">
                     <mt-cell v-for="(vehicle, index) in unSoldVehicle" :key="index" :title="vehicle.vehiclePlate"
                      :label="'品牌 '+vehicle.vehicleBrand" is-link :to="'/saleVehicle/?vehicleId=' + vehicle.id">
-                        <mt-badge v-if="!vehicle.preparednesses.length" type="error">未整备</mt-badge>
+                        <mt-badge v-if="vehicle.stayDate > 30 " type="error">库存超{{ vehicle.stayDate | stayMonth }}月</mt-badge>
+                        <mt-badge v-if="!vehicle.preparednesses.length" type="warning">未整备</mt-badge>
                     </mt-cell>
                 </section>
             </mt-tab-container-item>
             <mt-tab-container-item id="2">
                 <mt-cell v-for="(vehicle, index) in soldVehicle" :key="index" :title="vehicle.vehiclePlate"
                  :label="'品牌 '+vehicle.vehicleBrand" is-link :to="'/saleVehicle/?vehicleId=' + vehicle.id">
+                    <mt-badge v-if="vehicle.saleItem.selfProfit < 0" type="error">亏损</mt-badge>
                     <mt-badge v-if="vehicle.saleItem.clearState===1" type="warning">已结</mt-badge>
                 </mt-cell>
             </mt-tab-container-item>
@@ -38,6 +40,7 @@
 <script>
 import vehicleListPage from '../../request/requests/vehicleInfo.js'
 import { Toast } from 'mint-ui';
+import moment from 'moment';
 export default {
     data() {
         return {
@@ -55,6 +58,11 @@ export default {
     },
     destroyed(){
         sessionStorage.setItem("tabId", this.selected)
+    },
+    filters: {
+      stayMonth(day) {
+          return Math.floor(day/30);
+      }
     },
     methods: {
         /**
@@ -95,9 +103,11 @@ export default {
          * @since: 2021年1月19日
          */
         updateListData(res, param) {
+            let nowDay = moment();
             if(res.code === 200) {
                 var data = res.data
                 for(var i=0, len=data.length; i< len; i++){
+                    data[i].stayDate = nowDay.diff(moment(data[i].purchaseDate), 'day')
                     if(data[i].saleitemId != null){
                         this.soldVehicle.push(data[i])
                     }else {
