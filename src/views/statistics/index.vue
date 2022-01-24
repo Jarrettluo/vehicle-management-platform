@@ -6,49 +6,58 @@
             </router-link>
             <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
         </mt-header>
-        <div style="padding: 14px;">
-            <br>
+        <div style="padding: 10px;">
             <h4 style="color: #1f4e79">年度报表</h4>
-            <div class="report-item shadow-sm" style="background-color: #ff6666">
-                <div class="report-value">
-                    <h3>{{ statisticsData.totalSales?statisticsData.totalSales:0.00 }}</h3>
-                </div>
-                <div class="report-name">
-                    累计销售额（元）
-                </div>
-            </div>
-            <div class="report-item shadow-sm" style="background-color: #ff9900">
-                <div class="report-value">
-                    <h3>{{ statisticsData.totalProfit?statisticsData.totalProfit:0.00 }}</h3>
-                </div>
-                <div class="report-name">
-                    累计利润（元）
-                </div>
-            </div>
             <div>
-                <div class="row">
-                    <div class="col">
-                        <div class="item-left shadow-sm" @click="linkToUnsale">
-                            <div class="half-card-value">
-                                <h3>{{ statisticsData.totalNotSold }}</h3>
-                            </div>
-                            <div class="half-card-name">
-                                在售车辆总数(辆)
+                <div class="report-item shadow-sm" style="background-color: #ff6666">
+                    <div class="report-value">
+                        <h3>{{ statisticsData.totalSales?statisticsData.totalSales:0.00 }}</h3>
+                    </div>
+                    <div class="report-name">
+                        累计销售额（元）
+                    </div>
+                </div>
+                <div class="report-item shadow-sm" style="background-color: #ff9900">
+                    <div class="report-value">
+                        <h3>{{ statisticsData.totalProfit?statisticsData.totalProfit:0.00 }}</h3>
+                    </div>
+                    <div class="report-name">
+                        累计利润（元）
+                    </div>
+                </div>
+                <div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="item-left shadow-sm" @click="linkToUnsale">
+                                <div class="half-card-value">
+                                    <h3>{{ statisticsData.totalNotSold }}</h3>
+                                </div>
+                                <div class="half-card-name">
+                                    在售车辆总数(辆)
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="item-right shadow-sm" @click="linkToSaled">
-                            <div class="half-card-value">
-                                <h3>{{ statisticsData.totalSold }}</h3>
-                            </div>
-                            <div class="half-card-name">
-                                已售车辆总数(辆)
+                        <div class="col">
+                            <div class="item-right shadow-sm" @click="linkToSaled">
+                                <div class="half-card-value">
+                                    <h3>{{ statisticsData.totalSold }}</h3>
+                                </div>
+                                <div class="half-card-name">
+                                    已售车辆总数(辆)
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
+            <br>
+            <h4 style="color: #1f4e79">月度报表</h4>
+            <div style="width: 100%; height: 260px;">
+                <monthChart></monthChart>
+            </div>
+        </div>
+        <div style="width: 100%; height: 120px;">
         </div>
 
     </div>
@@ -57,6 +66,7 @@
 <script>
 import StatisticsPageRequest from '../../request/requests/statistics'
 import { Toast } from 'mint-ui';
+import monthChart from './components/monthChart'
 export default {
     data() {
         return {
@@ -67,6 +77,9 @@ export default {
                 totalSold: 0,
             }
         }
+    },
+    components: {
+        monthChart
     },
     mounted() {
         this.acquireStatistics();
@@ -136,6 +149,10 @@ export default {
 
 .h3 {
     font: bold;
+}
+
+h4 {
+    font-size: 1.2rem;
 }
 
 .report-name {

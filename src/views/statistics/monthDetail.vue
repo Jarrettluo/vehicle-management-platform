@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div style="font-size: 0.6rem;">
         <div>
             <mt-header title="销售统计报表">
-                <router-link to="/homepage" slot="left">
+                <router-link to="/statistics" slot="left">
                     <mt-button icon="back">返回</mt-button>
                 </router-link>
                 <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
@@ -37,22 +37,31 @@
         <div>
 
         </div>
-        <div style="padding: 10px 0px 0px 0px;">
+        <div class="vehicle-item-group-title">
             售出车辆详情
         </div>
-        <div style="height: 16px;">车辆信息 <i class="fa fa-sort" ></i></div>
-        <div>车辆利润 <i class="fa fa-sort" ></i></div>
+        <div class="vehicle-group-title">
+            <div class="sort-item">车辆信息 <i class="fa fa-sort" ></i></div>
+            <div class="sort-item">车辆利润 <i class="fa fa-sort" ></i></div>
+        </div>
+
         <div class="vehicle-item-group" v-for="vehicle in vehicleMonth" :key="vehicle.id">
             <VehicleItem :vehicle-info="vehicle"></VehicleItem>
         </div>
 
-        <div style="padding: 10px 0px 0px 0px;">
+        <div class="vehicle-item-group-title">
             购入车辆详情
         </div>
-        <div style="height: 16px;">车辆信息 <i class="fa fa-sort" ></i></div>
-        <div>车辆利润 <i class="fa fa-sort" ></i></div>
+        <div class="vehicle-group-title" >
+            <div class="sort-item" >车辆信息 <i class="fa fa-sort" ></i></div>
+            <div class="sort-item" >车辆利润 <i class="fa fa-sort" ></i></div>
+        </div>
+
         <div class="vehicle-item-group" v-for="vehicle in vehicleMonth" :key="vehicle.id">
             <VehicleItem :vehicle-info="vehicle"></VehicleItem>
+        </div>
+
+        <div style="width: 100%; height: 120px;">
         </div>
 
 <!--        <div>-->
@@ -106,9 +115,35 @@ export default {
 </script>
 
 <style scoped>
-.vehicle-item-group {
-
+*{
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.vehicle-item-group-title {
+    margin-top: 10px;
+    padding: 10px 0px 10px 10px;
+    font-size: 1rem;
+    color: #3d4049;
+    background-color: #e5e5e5;
+}
+.vehicle-group-title {
+    height: 32px;
+    display: flex;
+    justify-content:space-between;
+    vertical-align: bottom;
 }
 
+.sort-item {
+    width: 33%;
+    text-align: center;
+    padding: 12px 0 0 0;
+}
+
+.sort-item:hover {
+    color: #0062cc;
+}
+.sort-item:visited {
+    color: #0062cc;
+}
 
 </style>

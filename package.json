@@ -13,9 +13,11 @@
     "baidu-aip-sdk": "^4.15.6",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^2.6.5",
+    "echarts": "^5.2.2",
     "mint-ui": "^2.2.13",
     "moment": "^2.29.1",
     "vue": "^2.6.10",
+    "vue-echarts": "^6.0.2",
     "vue-floating": "^0.2.4",
     "vue-html5plus": "^1.0.0",
     "vue-router": "^3.5.1"

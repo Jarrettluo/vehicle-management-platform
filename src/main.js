@@ -35,6 +35,9 @@ Vue.use(Floating)
 
 Vue.config.productionTip = false
 
+import * as echarts from 'echarts'
+Vue.prototype.$echarts = echarts
+
 new Vue({
   render: h => h(App),
   router,
