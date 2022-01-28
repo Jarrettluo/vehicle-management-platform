@@ -13,7 +13,7 @@
                 <span class="tag income-tag">支</span>
                 {{vehicleInfo.outcome}}
             </div>
-            <div class="item-info">
+            <div class="item-info" v-if="vehicleInfo.income != null ">
                 <span class="tag outcome-tag" >收</span>
                 {{vehicleInfo.income}}
             </div>

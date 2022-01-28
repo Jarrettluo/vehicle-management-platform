@@ -34,13 +34,14 @@ export default {
             }
         }
     },
+    props: ["year"],
     mounted(){
         this.getYearMonthStat();
     },
     methods: {
-        async getYearMonthStat(){
+        async getYearMonthStat(year){
             let params = {
-                year: 2021,
+                year: year?year:this.year,
                 companyId: sessionStorage.getItem("companyId")
             }
             await StatisticsPageRequest.statisticsMonthRequest(params)
@@ -96,7 +97,8 @@ export default {
             this.$router.push({
                 path: '/statistics/month',
                 query: {
-                    dataIndex: dataIndex
+                    year: this.year,
+                    month: dataIndex + 1,
                 }
             })
         }

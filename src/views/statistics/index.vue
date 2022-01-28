@@ -7,16 +7,16 @@
             <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
         </mt-header>
         <div style="margin: 6px 0; display: flex;text-align: center;flex-wrap: wrap; justify-content: space-between;padding: 6px 0px;">
-            <div style="width: 25%; border-right: 1px solid #eaeaea;font-size: 0.6rem;">
+            <div style="width: 25%; border-right: 1px solid #eaeaea;font-size: 0.6rem;" @click="lastYear">
                 <div><i class="fa fa-chevron-left"></i></div>
-                <div>上一月</div>
+                <div>上一年</div>
             </div>
             <div style="line-height: 36px;font-size: 1.1rem; color: #3d4049;">
-                2022年
+                {{ year }}年
             </div>
-            <div style="width: 25%; border-left: 1px solid #eaeaea; font-size: 0.6rem;">
+            <div style="width: 25%; border-left: 1px solid #eaeaea; font-size: 0.6rem;" @click="nextYear">
                 <div><i class="fa fa-chevron-right"></i></div>
-                <div>下一月</div>
+                <div>下一年</div>
             </div>
         </div>
         <div style="padding: 10px;">
@@ -67,7 +67,7 @@
             <br>
             <h4 style="color: #1f4e79">月度报表</h4>
             <div style="width: 100%; height: 260px;">
-                <monthChart></monthChart>
+                <monthChart ref="monthChart" :year="year"></monthChart>
             </div>
         </div>
         <div style="width: 100%; height: 120px;">
@@ -88,7 +88,8 @@ export default {
                 totalProfit: 0,
                 totalNotSold: 0,
                 totalSold: 0,
-            }
+            },
+            year: new Date().getFullYear(),
         }
     },
     components: {
@@ -105,7 +106,8 @@ export default {
          */
         async acquireStatistics(){
             let params = {
-                companyId: sessionStorage.getItem("companyId")
+                companyId: sessionStorage.getItem("companyId"),
+                year: this.year
             }
             await StatisticsPageRequest.statisticsRequest(params)
                 .then(res => {
@@ -143,6 +145,14 @@ export default {
                 id: "2",
                 }
             })
+        },
+        lastYear() {
+            this.year --;
+            this.$refs.monthChart.getYearMonthStat(this.year);
+        },
+        nextYear() {
+            this.year ++;
+            this.$refs.monthChart.getYearMonthStat(this.year);
         }
     }
 }
