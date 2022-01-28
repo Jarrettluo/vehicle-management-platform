@@ -149,10 +149,12 @@ export default {
         lastYear() {
             this.year --;
             this.$refs.monthChart.getYearMonthStat(this.year);
+            this.acquireStatistics();
         },
         nextYear() {
             this.year ++;
             this.$refs.monthChart.getYearMonthStat(this.year);
+            this.acquireStatistics();
         }
     }
 }
