@@ -1,12 +1,11 @@
 <template>
-<!--    <v-chart :options="option"/>-->
     <div id="myChart3" :style="{width: '400px', height: '300px'}"></div>
 </template>
 
 <script>
-// import ECharts from 'vue-echarts'
-// import 'echarts/lib/chart/line'       //绘制不同的图表要引入不同的chart和component
-// import 'echarts/lib/component/bar'
+
+import StatisticsPageRequest from "../../../request/requests/statistics";
+import {Toast} from "mint-ui";
 
 export default {
     name: "monthChart.vue",
@@ -36,10 +35,25 @@ export default {
         }
     },
     mounted(){
-        this.drawLine();
+        this.getYearMonthStat();
     },
     methods: {
-        drawLine(){
+        async getYearMonthStat(){
+            let params = {
+                year: 2021,
+                companyId: sessionStorage.getItem("companyId")
+            }
+            await StatisticsPageRequest.statisticsMonthRequest(params)
+                .then(res => {
+                    if(res.code == 200){
+                        this.drawLine(res.data);
+                    }
+                })
+                .catch(err => {
+                    Toast("获取失败，检查网络")
+                })
+        },
+        drawLine(data){
             // 基于准备好的dom，初始化echarts实例
             let myChart3 = this.$echarts.init(document.getElementById('myChart3'))
             let option = {
@@ -48,14 +62,14 @@ export default {
                 },
                 xAxis: {
                     type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                    data: data.month
                 },
                 yAxis: {
                     type: 'value'
                 },
                 series: [
                     {
-                        data: [120, 200, 150, 80, 70, 110, 130],
+                        data: data.stat,
                         type: 'bar',
                         showBackground: true,
                         backgroundStyle: {

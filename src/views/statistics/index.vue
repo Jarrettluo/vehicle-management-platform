@@ -6,6 +6,19 @@
             </router-link>
             <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
         </mt-header>
+        <div style="margin: 6px 0; display: flex;text-align: center;flex-wrap: wrap; justify-content: space-between;padding: 6px 0px;">
+            <div style="width: 25%; border-right: 1px solid #eaeaea;font-size: 0.6rem;">
+                <div><i class="fa fa-chevron-left"></i></div>
+                <div>上一月</div>
+            </div>
+            <div style="line-height: 36px;font-size: 1.1rem; color: #3d4049;">
+                2022年
+            </div>
+            <div style="width: 25%; border-left: 1px solid #eaeaea; font-size: 0.6rem;">
+                <div><i class="fa fa-chevron-right"></i></div>
+                <div>下一月</div>
+            </div>
+        </div>
         <div style="padding: 10px;">
             <h4 style="color: #1f4e79">年度报表</h4>
             <div>
