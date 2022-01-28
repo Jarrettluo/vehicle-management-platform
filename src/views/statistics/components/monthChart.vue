@@ -1,5 +1,5 @@
 <template>
-    <div id="myChart3" :style="{width: '400px', height: '300px'}"></div>
+    <div id="myChart3"></div>
 </template>
 
 <script>
@@ -59,7 +59,9 @@ export default {
             let myChart3 = this.$echarts.init(document.getElementById('myChart3'))
             let option = {
                 grid: {
-                    top: 10
+                    top: 10,
+                    right: 10,
+                    bottom: 26,
                 },
                 xAxis: {
                     type: 'category',
@@ -107,7 +109,7 @@ export default {
 </script>
 
 <style scoped>
-.echarts {
+#myChart3 {
     width: 100%;
     height: 100%;
 }

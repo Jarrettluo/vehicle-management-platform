@@ -19,7 +19,7 @@
                 <div>下一年</div>
             </div>
         </div>
-        <div style="padding: 10px;">
+        <div style="padding: 0px 10px;">
             <h4 style="color: #1f4e79">年度报表</h4>
             <div>
                 <div class="report-item shadow-sm" style="background-color: #ff6666">
@@ -66,7 +66,7 @@
             </div>
             <br>
             <h4 style="color: #1f4e79">月度报表</h4>
-            <div style="width: 100%; height: 260px;">
+            <div style="width: calc(100% - 0px); height: 240px;">
                 <monthChart ref="monthChart" :year="year"></monthChart>
             </div>
         </div>
