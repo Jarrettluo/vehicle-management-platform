@@ -306,7 +306,7 @@ export default {
 .vehicle-item-group-title {
     margin-top: 10px;
     padding: 10px 0px 10px 10px;
-    font-size: 1rem;
+    font-size: 12px;
     color: #3d4049;
     background-color: #e5e5e5;
 }
