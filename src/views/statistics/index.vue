@@ -7,14 +7,14 @@
             <router-link to="/homepage" class="tohomepage" slot="right"><i class="fa fa-home" aria-hidden="true"></i></router-link>
         </mt-header>
         <div style="margin: 6px 0; display: flex;text-align: center;flex-wrap: wrap; justify-content: space-between;padding: 6px 0px;">
-            <div style="width: 25%; border-right: 1px solid #eaeaea;font-size: 0.6rem;" @click="lastYear">
+            <div class="last-year-button" style="width: 25%; border-right: 1px solid #eaeaea;font-size: 0.6rem;" @click="lastYear">
                 <div><i class="fa fa-chevron-left"></i></div>
                 <div>上一年</div>
             </div>
-            <div style="line-height: 36px;font-size: 1.1rem; color: #3d4049;">
+            <div style="line-height: 36px;font-size: 12px; color: #3d4049;">
                 {{ year }}年
             </div>
-            <div style="width: 25%; border-left: 1px solid #eaeaea; font-size: 0.6rem;" @click="nextYear">
+            <div class="next-year-button" style="width: 25%; border-left: 1px solid #eaeaea; font-size: 0.6rem;" @click="nextYear">
                 <div><i class="fa fa-chevron-right"></i></div>
                 <div>下一年</div>
             </div>
@@ -65,7 +65,7 @@
 
             </div>
             <br>
-            <h4 style="color: #1f4e79">月度报表</h4>
+            <h4 style="color: #1f4e79">月度报表<span style="font-size: 8px; color: #999999;">点击月份可查看详情</span></h4>
             <div style="width: calc(100% - 0px); height: 240px;">
                 <monthChart ref="monthChart" :year="year"></monthChart>
             </div>
@@ -215,6 +215,25 @@ h4 {
 .item-right:active {
     background-color: #55dbae;
     box-shadow: 2px 2px 10px #000;
+}
+
+/*.next-year-button {*/
+/*    cursor: pointer;*/
+/*    -webkit-appearance: none;*/
+/*    outline: none;*/
+/*}*/
+
+.next-year-button:active{
+    color: white;
+    border-radius: 5px;
+    background: #ccc;
+    opacity: 0.5;
+}
+.last-year-button:active {
+    color: white;
+    border-radius: 5px;
+    background: #ccc;
+    opacity: 0.5;
 }
 
 </style>

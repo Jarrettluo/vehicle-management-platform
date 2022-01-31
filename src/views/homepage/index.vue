@@ -282,7 +282,20 @@ export default {
   /* Scaling button to 0.98 to its original size */ 
   box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24); 
   /* Lowering the shadow */ 
-  } 
+  }
+
+.item-right:active{
+    background-color: #e6e6e6;
+    margin-right: -10px;
+    border-radius: 4px;
+    padding: 15px 5px;
+    text-align: center;
+
+    transform: scale(0.98);
+    /* Scaling button to 0.98 to its original size */
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    /* Lowering the shadow */
+}
 
 .logo-item{
   border-radius: 20px;

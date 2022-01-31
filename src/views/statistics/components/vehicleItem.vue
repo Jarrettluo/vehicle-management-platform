@@ -27,8 +27,8 @@
                     {{ vehicleInfo | profitPercent }}%
                 </div>
             </div>
-            <div class="expand-button">
-                <i class="fa fa-caret-down"></i>
+            <div class="expand-button" @click="jump2Detail(vehicleInfo.pId)">
+                <i class="fa fa-caret-right"></i>
             </div>
         </div>
     </div>
@@ -47,6 +47,28 @@ export default {
         profitPercent(vehicleInfo){
             return (vehicleInfo.profit/vehicleInfo.outcome).toFixed(2);
         }
+    },
+    methods: {
+        linkToUnsale() {
+            this.$router.push({
+                path: '/vehicleList',
+                query: {
+                    id: "1",
+                }
+            })
+        },
+        /**
+         * 路由跳转到详情页面
+         * @param id
+         */
+        jump2Detail(id){
+            this.$router.push({
+                path: '/saleVehicle/',
+                query: {
+                    vehicleId: id
+                }
+            })
+        }
     }
 
 
@@ -58,7 +80,7 @@ export default {
 .vehicle-item {
     color: #475056;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 12px;
     border-bottom: 1px solid #f1f2f3;
     height: 60px;
     width: 100%;
@@ -71,15 +93,17 @@ export default {
 }
 
 .vehicle-plate {
-    font-size: 1.1rem;
+    font-size: 14px;
     line-height: 24px;
     font-weight: 430;
     color: #0062cc;
+    display:table-cell;
+    vertical-align:bottom;
 }
 
 .vehicle-model {
-    font-size: 0.9rem;
-    ine-height: 16px;
+    font-size: 10px;
+    line-height: 16px;
 }
 
 .center-item {
@@ -94,7 +118,7 @@ export default {
     padding: 0px 2px;
     border-radius: 4px;
     color: #f1f3f4;
-    font-size: 14px;
+    font-size: 10px;
     line-height: 20px;
 }
 
@@ -113,6 +137,9 @@ export default {
     color: #999999;
 }
 
+.expand-button:active {
+    color: deepskyblue;
+}
 .pasitive-value {
     color: red;
 }
