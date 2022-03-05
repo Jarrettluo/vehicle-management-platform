@@ -684,7 +684,6 @@ export default {
          * @since 2022年3月5日
          */
         cancelResult() {
-            console.log("=====")
             this.switchVinRecognizedPanel(false)
 
         },
@@ -694,8 +693,12 @@ export default {
          */
         confirmResult() {
             this.switchVinRecognizedPanel(false)
+            this.vehicleInfo.vehicleBrand = this.vinRecogniazeResult.brand_name + this.vinRecogniazeResult.series_name
         },
-
+        /**
+         * 切换vin识别弹窗的开启关闭状态
+         * @param state true ｜ false 代表开启和关闭
+         */
         switchVinRecognizedPanel(state){
             if([false, true].includes(state)){
                 this.masking = state

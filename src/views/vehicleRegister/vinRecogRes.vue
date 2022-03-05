@@ -29,20 +29,20 @@ export default {
                 chassis_number: "A5(1K)",
                 cid: "21416",
                 cms: "4",
-                csjg: "三厢车",
+                csjg: "三厢车", //
                 displacement: "1.6",
                 displacement_ml: "1595",
                 driven_type: "前置前驱",
                 effluent_standard: "欧IV", // 排放标准
                 engine_model: "",
                 front_tyre_size: "205/55 R16",
-                full_weight: "1379",
+                full_weight: "1379", // 整车质量
                 gearbox: "6挡手自一体", // 变速箱类型
                 gearbox_number: "09G/TF-60SN", // 变速箱编码
                 geartype: "手自一体变速箱(AT)", // 变速箱分类
-                high: "1461",
+                high: "1461", //
                 is_commercial: 0,
-                length: "4544",
+                length: "4544", //
                 market_date: "2010.11", // 上市时间
                 matching_mode: 1,
                 name: "2011款 1.6L 自动舒适型", //
@@ -58,15 +58,16 @@ export default {
                 trackrear: "1528",
                 vin: "LFV2A21K6A3092399", //
                 wheelbase: "2578",
-                width: "1760",
-                year: "2011",
+                width: "1760", //
+                year: "2011", //
                 zws: "5",
             },
             renderList: [
                 {
                     keyName: "vin",
                     keyDesc: "车辆编码",
-                    icon: "fa fa-barcode"
+                    icon: "fa fa-barcode",
+
                 },
                 {
                     keyName: "brand_name",
@@ -132,6 +133,27 @@ export default {
                     keyName: "ryxh",
                     keyDesc: "燃油牌号",
                     icon: "fa fa-tint"
+                },
+
+                {
+                    keyName: "full_weight",
+                    keyDesc: "整车质量",
+                    icon: "fa fa-cube"
+                },
+                {
+                    keyName: "length",
+                    keyDesc: "长度",
+                    icon: "fa fa-cube"
+                },
+                {
+                    keyName: "width",
+                    keyDesc: "宽度",
+                    icon: "fa fa-cube"
+                },
+                {
+                    keyName: "high",
+                    keyDesc: "高度",
+                    icon: "fa fa-cube"
                 },
 
 
