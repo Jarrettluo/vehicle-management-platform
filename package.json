@@ -16,6 +16,7 @@
     "echarts": "^5.2.2",
     "mint-ui": "^2.2.13",
     "moment": "^2.29.1",
+    "sass-loader": "^12.6.0",
     "vue": "^2.6.10",
     "vue-echarts": "^6.0.2",
     "vue-floating": "^0.2.4",

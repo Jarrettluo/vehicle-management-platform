@@ -86,7 +86,7 @@
             </div>
         </div>
 
-        <div v-show="partnerVisible || preparedVisible" style="position: absolute; z-index: 1; top: 0px; left: 0px; background-color: #1b1e21;opacity:0.2;width: 100%; height: 100vh;">
+        <div v-show="partnerVisible || preparedVisible || vinRecognizedVisible" style="position: absolute; z-index: 1; top: 0px; left: 0px; background-color: #1b1e21;opacity:0.2;width: 100%; height: 100vh;">
         </div>
         
         <mt-actionsheet
@@ -102,6 +102,15 @@
         <Preparednesses ref="preparedChild" v-show="preparedVisible" :partners="partnerList"> </Preparednesses>
     </div>
 
+    <div :class="vinRecognizedVisible ? 'vin-recog-panel' : ''" v-show="vinRecognizedVisible">
+        <VinRecogRes
+            :vinRecogniazeResult = vinRecogniazeResult
+            @recognizeAgain="recognizeAgain"
+            @cancelResult = "cancelResult"
+            @confirmResult = "confirmResult"
+        ></VinRecogRes>
+    </div>
+
 </div>
 </template>
 
@@ -115,6 +124,7 @@ import Partner from './addPartner'
 import Preparednesses from './addPreparedness'
 import {compressImage} from '../../utils/CompressImageUtils'
 import moment from 'moment'
+import VinRecogRes from './vinRecogRes'
 
 export default {
     data() {
@@ -151,16 +161,19 @@ export default {
             // action sheet 默认不显示，为false。操作sheetVisible可以控制显示与隐藏  
             sheetVisible1: false,
 
-            partnerVisible: false,
+            partnerVisible: false, // 合伙人输入框的可见状态
 
-            preparedVisible: false,
+            preparedVisible: false, // 整备信息可见状态
             partnerList:[],
             masking: false, // 遮罩的module
+            vinRecognizedVisible: false, // vin识别信息可见状态
+            vinRecogniazeResult: {}
         }
     },
     components: {
-      Partner,
-      Preparednesses,
+        Partner,
+        Preparednesses,
+        VinRecogRes
     },
     beforeCreate() {
         document.addEventListener('plusready',function() {
@@ -174,7 +187,6 @@ export default {
         this.vehicleInfo.purchaseDate = moment((new Date()).getTime()).format('YYYY-MM-DD')
     },
     mounted() {
-        
     },
     watch: {
         '$route': 'getParams'
@@ -607,8 +619,10 @@ export default {
             .then(res => {
               Indicator.close();
               if(res.data){
-                Toast("识别成功："  + res.data)
-                this.vehicleInfo.vinCode = res.data
+                  this.vinRecogniazeResult = res.data.data
+                  // Toast("识别成功："  + res.data.vinCode)
+                  this.vehicleInfo.vinCode = res.data.vinCode
+                  this.switchVinRecognizedPanel(true) // 打开vin识别的弹窗页面
               }else {
                 Toast("识别失败，请重试！")
               }
@@ -656,6 +670,38 @@ export default {
                       .slice(r, len)
                       .match(/\d{3}/g)
                       .join(',');
+        },
+        /**
+         * 重新打开识别器，请关闭弹窗
+         * @since 2022年3月5日
+         */
+        recognizeAgain() {
+            this.switchVinRecognizedPanel(false)
+
+        },
+        /**
+         * 取消使用vin识别的信息填充，用于关闭信息，并重新赋值
+         * @since 2022年3月5日
+         */
+        cancelResult() {
+            console.log("=====")
+            this.switchVinRecognizedPanel(false)
+
+        },
+        /**
+         * 确认用vin识别的信息来填充model
+         * @since 2022年3月5日
+         */
+        confirmResult() {
+            this.switchVinRecognizedPanel(false)
+        },
+
+        switchVinRecognizedPanel(state){
+            if([false, true].includes(state)){
+                this.masking = state
+                this.vinRecognizedVisible = state
+            }
+            return
         }
 
 
@@ -813,6 +859,15 @@ a:focus {
        }
     }
 
-
+.vin-recog-panel {
+    position: absolute;
+    height: calc( 100vh - 120px);
+    width: calc(100vw - 20px);
+    background-color: #fcfcfc;
+    top: 60px;
+    left: 10px;
+    border-radius: 4px;
+    z-index: 999;
+}
 
 </style>
