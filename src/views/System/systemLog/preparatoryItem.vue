@@ -56,9 +56,7 @@ import { MessageBox } from 'mint-ui';
 export default {
     data(){
         return {
-            operateLogList: [],
             usernameList: [],
-
             defaultItemList: [], // 默认的整备项目
             userItemList: [], //
         }
@@ -76,7 +74,7 @@ export default {
         this.getParams()
     },
     mounted(){
-        this.acquireStatistics()
+        this.acquireItemList()
     },
     methods: {
         goBack(){
@@ -84,6 +82,8 @@ export default {
         },
         /**
          * 获取路由参数
+         * @author 罗佳瑞
+         * @since 2022年3月6日
          */
         getParams () {
             var username = this.$route.query.username;
@@ -91,31 +91,29 @@ export default {
                 this.usernameList.push(username);
             }
         },
-
         /**
          * 异步获取后台的数据
          * @author: 罗佳瑞
          * @since: 2021年1月19日
          */
-        async acquireStatistics(){
+        async acquireItemList(){
             let params = {
                 companyId: sessionStorage.getItem("companyId")
             }
             await preparatoryItemRequest.allPreparatoryItem(params)
                 .then(res => {
-                    this.updateStatisticsDate(res)
+                    this.updateItemList(res)
                 })
                 .catch(err => {
-                    Toast("获取失败，检查网络")
+                    Toast("获取失败，检查网络" + err)
                 })
         },
-
         /**
          * 数据更新到dom
          * @author: 罗佳瑞
          * @since: 2021年1月19日
          */
-        updateStatisticsDate(res) {
+        updateItemList(res) {
             this.defaultItemList = []
             this.userItemList = []
             if (res.code === 200) {
@@ -126,27 +124,26 @@ export default {
                         this.userItemList.push(item)
                     }
                 })
-                this.operateLogList = res.data; // 翻转列表
             } else {
                 Toast("获取失败，检查网络")
             }
         },
-
         /**
-         * 添加新项目
+         * 添加新项目，弹窗让用户输入
+         * @since 2022年3月6日
          */
         addNewItem(){
             var that = this
             MessageBox
                 .prompt('请输入自定义项目')
                 .then(({ value, action }) => {
-                console.log(value)
                     that.addPreparatory(value)
             });
         },
         /**
-         * 添加整备项目
+         * 添加整备项目，提交到后台
          * @author 罗佳瑞
+         * @since 2022年3月6日
          * */
         async addPreparatory(value){
             let params = {
@@ -165,24 +162,29 @@ export default {
 
                 })
                 .catch(err => {
-                    Toast("获取失败，检查网络")
+                    Toast("获取失败，检查网络" + err)
                 })
         },
 
         /**
-         *
-         * @param item
+         * 删除自定义的项目
+         * @param item 自定义项目
+         * @since 2022年3月6日
          */
         async removeItem(item) {
             await preparatoryItemRequest.removePreparatoryItem({
                 itemId: item.id
             })
-                .then(res => {
-                    this.acquireStatistics()
-                })
-                .catch(err => {
+            .then(res => {
+                if(res.code == 200){
+                    this.acquireItemList()
+                }else {
                     Toast("删除失败，请重试！")
-                })
+                }
+            })
+            .catch(err => {
+                Toast("删除失败，请重试！")
+            })
         }
 
     }

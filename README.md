@@ -40,3 +40,6 @@ npm run lint
 vin查询接口
 http://118.31.113.49/api/vin/v2/index?key=d7ba9fa7634764f2fd5bb81e8183ce18&vin=LFV2A21K363553763
 https://blog.csdn.net/weixin_46796702?type=blog
+
+图标地址
+http://www.fontawesome.com.cn/faicons/

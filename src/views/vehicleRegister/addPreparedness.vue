@@ -1,8 +1,12 @@
 <template>
     <div style="padding: 20px 10px 0px 10px">
         <div class="prepared-group" v-for='(item,index) in itemcountPrepared' :key="index" :id="'myid'+index" :v-model="preparednesses[index]">
-            <mt-field label="整备项目" placeholder="请输入整备项目名称" type="text" v-model="preparednesses[index].repairItem"
-            :attr="{ maxlength: 10 }"></mt-field>
+            <mt-field label="整备项目" placeholder="点击右侧选择整备项目名称" type="text" v-model="preparednesses[index].repairItem"
+            :attr="{ maxlength: 10 }">
+                <a href="javascript:;" class="vin-image-file file" @click="clickItemsPanel(index)">
+                    <span style="line-height: 24px"><i class="fa fa-list-alt" aria-hidden="true"></i></span>
+                </a>
+            </mt-field>
             <mt-field label="整备金额" placeholder="请输入花费金额（元）" type="number" v-model="preparednesses[index].repairPrice"
             :attr="{ min: 0, max: 10000000 }"></mt-field>
             <mt-field 
@@ -45,12 +49,25 @@
             </div>
         </div>
 
+        <!-- 备选弹窗，用于选择整备出资人 -->
         <mt-popup v-model="popupVisible" popup-transition="popup-fade" position="bottom">
             <div class="picker-toolbar-title">
                 <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
                 <div class="usi-btn-sure" @click="addrConfirm">确定</div>
             </div>
             <mt-picker ref='picker' :slots="slots" value-key='name' @change="onValuesChange"></mt-picker>
+        </mt-popup>
+
+        <!--  备选弹窗，用于选择整备名称 -->
+        <mt-popup
+            v-model="itemPickerVisible"
+            popup-transition="popup-fade"
+            position="bottom">
+            <div class="picker-toolbar-title">
+                <div class="usi-btn-cancel" @click="itemPickerVisible = !itemPickerVisible">取消</div>
+                <div class="usi-btn-sure" @click="preparedChooseConfirm">确定</div>
+            </div>
+            <mt-picker ref='picker2' :slots="preparedItems"  @change="changePreparedItem"></mt-picker>
         </mt-popup>
         
     </div>
@@ -60,6 +77,8 @@
 import preparedPageRequest from '../../request/requests/vehicleInfo.js'
 import { Toast, Indicator } from 'mint-ui';
 import moment from "moment";
+import preparatoryItemRequest from "../../request/requests/system";
+
 
 export default {
     data() {
@@ -75,6 +94,11 @@ export default {
             }],
             choosedIndex: null,
             popupVisible: false,
+
+            itemPickerVisible: false, // 整备项目选框
+            preparedItems: [], // 用于备选的整备项目信息
+
+
         }
     },
     computed:{
@@ -284,6 +308,80 @@ export default {
         addrConfirm() {
             this.popupVisible = false;
         },
+        /**
+         * @description 打开备选弹窗
+         * @since 2022年3月6日
+         * @author 罗佳瑞
+         */
+        clickItemsPanel(index){
+            this.itemPickerVisible = true  // 打开备选器
+            this.choosedIndex = index // 弹出的索引赋值
+            this.acquireItemList() // 从后台获取数据
+        },
+
+        /**
+         * 异步获取后台的数据
+         * @author: 罗佳瑞
+         * @since: 2021年1月19日
+         */
+        async acquireItemList(){
+            let params = {
+                companyId: sessionStorage.getItem("companyId")
+            }
+            await preparatoryItemRequest.allPreparatoryItem(params)
+                .then(res => {
+                    this.updateItemList(res)
+                })
+                .catch(err => {
+                    Toast("获取失败，检查网络" + err)
+                })
+        },
+        /**
+         * 数据更新到dom, todo 这里必须对返回回来的数据进行校验，否则会报错
+         * @author: 罗佳瑞
+         * @since: 2021年1月19日
+         */
+        updateItemList(res) {
+            this.defaultItemList = []
+            this.userItemList = []
+            if (res.code === 200) {
+                var itemList = []
+                res.data.forEach(item => {
+                    itemList.push(
+                        item.name
+                    )
+                })
+                this.preparedItems = [{values: itemList}]
+                // 取到当前序列的整备信息，如果所属人是空的，则进行直接赋值
+                let currentName = this.preparednesses[this.choosedIndex].repairItem
+                if(currentName === null){
+                    this.preparednesses[this.choosedIndex].repairItem = itemList[0]
+                }
+            } else {
+                Toast("获取失败，检查网络")
+            }
+        },
+        /**
+         * 用户选中了系统预设的整备名称
+         * @param picker
+         * @param values
+         * @returns {boolean} 返回状态
+         */
+        changePreparedItem(picker, values){
+            this.choosedPreparedItem = values[0];
+            if(this.choosedPreparedItem && this.choosedIndex!=null) {
+                this.preparednesses[this.choosedIndex].repairItem = this.choosedPreparedItem
+            }else {
+                return false
+            }
+        },
+        /**
+         * 确定选择以后，关闭弹窗
+         * @since 2022年3月6日
+         */
+        preparedChooseConfirm(){
+            this.itemPickerVisible = false
+        }
 
     }
 }
