@@ -105,6 +105,7 @@
     <div :class="vinRecognizedVisible ? 'vin-recog-panel' : ''" v-show="vinRecognizedVisible">
         <VinRecogRes
             :vinRecogniazeResult = vinRecogniazeResult
+            :vinCode = vinCode
             @recognizeAgain="recognizeAgain"
             @cancelResult = "cancelResult"
             @confirmResult = "confirmResult"
@@ -167,7 +168,8 @@ export default {
             partnerList:[],
             masking: false, // 遮罩的module
             vinRecognizedVisible: false, // vin识别信息可见状态
-            vinRecogniazeResult: {}
+            vinRecogniazeResult: {},
+            vinCode: null,
         }
     },
     components: {
@@ -617,23 +619,29 @@ export default {
         params.append("file", file, filename);
         await vehiclePageRequest.recorgnizeVinRequest(params)
             .then(res => {
-              Indicator.close();
-              if(res.data){
-                  this.vinRecogniazeResult = res.data.data
-                  // Toast("识别成功："  + res.data.vinCode)
-                  this.vehicleInfo.vinCode = res.data.vinCode
-                  this.switchVinRecognizedPanel(true) // 打开vin识别的弹窗页面
-              }else {
-                Toast("识别失败，请重试！")
-              }
-
+                Indicator.close();
+                this.updateVinRecognizeResult(res)
             })
             .catch(err => {
               Toast("" + err)
               Indicator.close();
             })
       },
-
+        /**
+         *
+         **/
+        updateVinRecognizeResult(res) {
+          if(res.code == 200 ){
+              this.vinCode = res.data.vinCode
+              this.vinRecogniazeResult = res.data.data
+              // Toast("识别成功："  + res.data.vinCode)
+              this.vehicleInfo.vinCode = res.data.vinCode
+              this.switchVinRecognizedPanel(true) // 打开vin识别的弹窗页面
+          }
+          else {
+              Toast("识别失败，请重试！")
+          }
+        },
         test(value){
             if(value == null) return false;
             value = value.replace(/[^\d.]/g, ''); // 清除"数字"和"."以外的字符

@@ -4,22 +4,36 @@
             <span>识别车辆信息</span>
         </div>
         <div class="page-body-res">
-            <mt-cell v-for="(renderItem, index) in renderList "
-                     :key="index" :title="renderItem.keyDesc"
-                     :value="vinRecogniazeResult[renderItem.keyName]">
-<!--                <i slot="icon" class="fa fa-copyright" aria-hidden="true"></i>-->
-                <i slot="icon" :class=renderItem.icon></i>
-            </mt-cell>
+            <div v-if="vinRecogniazeResult1.length > 0">
+                <mt-cell v-for="(renderItem, index) in renderList "
+                         :key="index" :title="renderItem.keyDesc"
+                         :value="vinRecogniazeResult1[renderItem.keyName]"
+                 v-show="vinRecogniazeResult1[renderItem.keyName]">
+                    <!--                <i slot="icon" class="fa fa-copyright" aria-hidden="true"></i>-->
+                    <i slot="icon" :class=renderItem.icon></i>
+                </mt-cell>
+                <div class="mention-info" style="text-align: center">识别不对？
+                    <span @click="vinRecogniazeResult1 = [] " style="color: #0062cc;">再来一次！</span></div>
+            </div>
+            <div v-else>
+                <div class="mention-info">貌似VIN没有识别正确，请核对后重新识别！</div>
+                <mt-field label="车辆VIN" placeholder="车辆VIN" v-model="usersVin" >
+                </mt-field>
+            </div>
+
         </div>
         <div class="page-footer">
-            <mt-button type="default" size="small" @click="recognizeAgain"><label style="margin-top:8px;">重新识别</label></mt-button>
+            <mt-button type="default" size="small" @click="recognizeAgain" :disabled="vinRecogniazeResult1.length > 0"><label style="margin-top:8px;">重新识别</label></mt-button>
             <mt-button type="default" size="small" @click="cancelResult"><label style="margin-top:8px;">取消识别</label></mt-button>
-            <mt-button type="primary" size="small" @click="confirmResult"><label style="margin-top:8px;">确认结果</label></mt-button>
+            <mt-button type="primary" size="small" @click="confirmResult" :disabled="vinRecogniazeResult1.length < 0"><label style="margin-top:8px;">确认结果</label></mt-button>
         </div>
     </div>
 </template>
 
 <script>
+import vehiclePageRequest from "../../request/requests/vehicleInfo";
+import {Toast} from "mint-ui";
+
 export default {
     name: "vinRecogRes.vue",
     data() {
@@ -158,20 +172,50 @@ export default {
 
 
 
-            ]
+            ],
+            usersVin: null,
+            vinRecogniazeResult1: [],
         }
     },
-    props: ["vinRecogniazeResult"],
+    props: ["vinRecogniazeResult", "vinCode"],
+    watch: {
+        vinCode(val) {
+            this.usersVin = val;
+        },
+        vinRecogniazeResult(val) {
+            this.vinRecogniazeResult1 = val
+        }
+    },
     methods: {
         recognizeAgain() {
-            this.$emit("recognizeAgain", true)
+            // this.$emit("recognizeAgain", true)
+            this.recognizeVinAgain()
         },
         cancelResult() {
             this.$emit("cancelResult", true)
         },
         confirmResult() {
             this.$emit("confirmResult", true)
-        }
+        },
+        /**
+         * 异步提交数据给后台
+         */
+        async recognizeVinAgain(){
+            if( this.vinRecogniazeResult.length > 0 || this.usersVin == null){
+                return
+            }
+            await vehiclePageRequest.checkVinRequest({vin: this.usersVin})
+                .then(res => {
+                    this.vinRecogniazeResult1 = res.data.data
+                    console.log(res)
+                    if(res.data.data.length = 0){
+                        Toast("" + res.data.msg)
+                    }
+                })
+                .catch(err => {
+                    Toast("" + err)
+                })
+        },
     }
 
 }
@@ -220,4 +264,12 @@ label /deep/ {
     margin-bottom: 0 !important;
 }
 
+.mention-info {
+    width: 100%;
+    padding: 5px 10px;
+    background-color: moccasin;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 4px;
+}
 </style>
